@@ -17,8 +17,15 @@ class Network:
         return self.__layers
 
     @property
-    def output_spike_trains(self) -> Tuple[cp.ndarray, cp.ndarray]:
+    def output_spike_trains(self) -> Tuple[cp.ndarray, cp.ndarray, cp.ndarray]:
         return self.__layers[-1].spike_trains
+
+    @property
+    def all_spike_trains(self) -> list:
+        spike_trains_list = []
+        for layer in self.__layers:
+            spike_trains_list.append(layer.spike_trains[2])
+        return spike_trains_list
 
     def add_layer(self, layer: AbstractLayer, input: bool = False) -> None:
         self.__layers.append(layer)
@@ -30,8 +37,9 @@ class Network:
             layer.reset()
 
     def forward(self, spikes_per_neuron: np.ndarray, n_spikes_per_neuron: np.ndarray,
+                discrete_spikes_per_neuron: np.ndarray,
                 max_simulation: float = np.inf, training: bool = False) -> None:
-        self.__input_layer.set_spike_trains(spikes_per_neuron, n_spikes_per_neuron)
+        self.__input_layer.set_spike_trains(spikes_per_neuron, n_spikes_per_neuron, discrete_spikes_per_neuron)
         for layer in self.__layers:
             layer.forward(max_simulation, training)
 

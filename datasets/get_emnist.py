@@ -2,8 +2,10 @@ import zipfile
 import shutil
 import os
 from download_file import download
+import emnist
 
 if __name__ == "__main__":
+    '''
     print("Downloading EMNIST...")
     url = 'http://www.itl.nist.gov/iaui/vip/cs_links/EMNIST/matlab.zip'
     filename = 'emnist.zip'
@@ -11,7 +13,8 @@ if __name__ == "__main__":
     download(url, filename)
 
     print("Done.")
-
+    '''
+    filename = 'emnist.zip'
     print("Extracting EMNIST...")
 
     with zipfile.ZipFile('emnist.zip', 'r') as zip_ref:

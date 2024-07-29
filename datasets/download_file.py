@@ -1,9 +1,11 @@
+import io
 import sys
 import requests
 
 """
 Code from https://gist.github.com/SkullTech/4510a5613c9aae89105fd1b6c424d0a0
 """
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def download(url, filename):
     with open(filename, 'wb') as f:

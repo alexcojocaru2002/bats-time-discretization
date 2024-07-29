@@ -1,0 +1,2 @@
+Epochs,Loss,Accuracy (%),Learning rate,Hidden layer 1 spike counts,Output layer spike counts,Hidden layer 1 silents (%),Output layer silents (%),Hidden layer 1 weights norm,Output layer weights norm,Time (s)
+1.0,11.6332,95.89999999999999,0.003,754.2236,41.9602,1.25,0.0,470.31213,58.695644,3.5921823978424072

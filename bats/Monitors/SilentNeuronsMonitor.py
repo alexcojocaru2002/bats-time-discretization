@@ -20,3 +20,9 @@ class SilentNeuronsMonitor(AbstractMonitor):
         super()._record(epoch, silent_ratio)
         self._total_counts = None
         return silent_ratio
+    def return_vals(self) -> list:
+        flattened_individual_arrays = [arr.flatten() if arr.ndim > 0 else np.array([arr.item()]) for arr in
+                                       self._values]
+        concatenated_array = np.concatenate(flattened_individual_arrays)
+        flattened_list = concatenated_array.tolist()
+        return flattened_list

@@ -8,6 +8,7 @@ from bats.Network import Network
 
 import cupy as cp
 
+
 class SpikeCountMonitor(AbstractMonitor):
     def __init__(self, layer_name: str, **kwargs):
         super().__init__(layer_name + " spike counts", **kwargs)

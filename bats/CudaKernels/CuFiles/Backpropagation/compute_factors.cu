@@ -24,8 +24,10 @@ extern "C" {
                 f2[spike_offset] = 0.0;
             return;
         }
-        if (factor_idx == 0) // f1
-            f1[spike_offset] = tau / a[spike_offset] * (1 + exp_tau[spike_offset] * c / x[spike_offset]);
+        if (factor_idx == 0) {
+            f1[spike_offset] = (tau / (x[spike_offset] * exp_tau[spike_offset]));
+            //f1[spike_offset] = tau / a[spike_offset] * (1 + exp_tau[spike_offset] * c / x[spike_offset]);
+        }
         else // f2
             f2[spike_offset] = tau / x[spike_offset];
     }

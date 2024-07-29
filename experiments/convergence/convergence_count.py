@@ -4,6 +4,9 @@ import cupy as cp
 
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+
+sys.path.insert(0, "../../")  # Add repository root to python path
 
 from bats import AbstractOptimizer, AbstractLoss, AbstractLayer
 from bats.Layers import InputLayer, LIFLayer
@@ -71,7 +74,7 @@ def train(network: Network, output_layer: AbstractLayer, loss_fct: AbstractLoss,
         pred = get_predictions(n_out_spikes)
         loss, errors = loss_fct.compute_loss_and_errors(out_spikes, n_out_spikes, LABELS_GPU)
 
-        gradient = network.backward(errors, cp.array(LABELS))
+        gradient = network.backward(errors)
 
         avg_gradient = [None if g is None else cp.mean(g, axis=0) for g in gradient]
         deltas = optimizer.step(avg_gradient)

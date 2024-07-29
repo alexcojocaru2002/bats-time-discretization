@@ -22,6 +22,7 @@ DATASET_PATH = Path("../../datasets/mnist.npz")
 INPUT_SHAPE = np.array([28, 28, 1])
 N_INPUTS = 28 * 28
 SIMULATION_TIME = 0.2
+DT = 0.001
 
 FILTER_1 = np.array([5, 5, 15])
 TAU_S_1 = 0.130
@@ -126,6 +127,7 @@ if __name__ == "__main__":
     feedforward = LIFLayer(previous_layer=pool_2, n_neurons=N_NEURONS_FC, tau_s=TAU_S_FC,
                            theta=THRESHOLD_HAT_FC,
                            delta_theta=DELTA_THRESHOLD_FC,
+                           time_delta=DT,
                            weight_initializer=weight_initializer_ff,
                            max_n_spike=SPIKE_BUFFER_SIZE_FC,
                            name="Feedforward 1")
@@ -134,6 +136,7 @@ if __name__ == "__main__":
     output_layer = LIFLayer(previous_layer=feedforward, n_neurons=N_OUTPUTS, tau_s=TAU_S_OUTPUT,
                             theta=THRESHOLD_HAT_OUTPUT,
                             delta_theta=DELTA_THRESHOLD_OUTPUT,
+                            time_delta=DT,
                             weight_initializer=weight_initializer_ff,
                             max_n_spike=SPIKE_BUFFER_SIZE_OUTPUT,
                             name="Output layer")

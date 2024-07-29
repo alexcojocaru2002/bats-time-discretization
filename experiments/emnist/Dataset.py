@@ -74,6 +74,7 @@ class Dataset:
         spike_times = TIME_WINDOW * (1 - (spike_times / MAX_VALUE))
         spike_times[spike_times == TIME_WINDOW] = np.inf
         n_spike_per_neuron = np.isfinite(spike_times).astype('int').reshape((samples.shape[0], N_NEURONS))
+
         return spike_times, n_spike_per_neuron
 
     def shuffle(self) -> None:

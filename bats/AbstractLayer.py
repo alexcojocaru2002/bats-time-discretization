@@ -28,7 +28,7 @@ class AbstractLayer(ABC):
 
     @property
     @abstractmethod
-    def spike_trains(self) -> Tuple[cp.ndarray, cp.ndarray]:
+    def spike_trains(self) -> Tuple[cp.ndarray, cp.ndarray, cp.ndarray]: # We want to add discrete time as well
         pass
 
     @property

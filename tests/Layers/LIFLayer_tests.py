@@ -44,14 +44,19 @@ class LifLayer_tests(unittest.TestCase):
         np.random.seed(42)
         n_spike_per_neuron = np.random.randint(0, n_spike, size=(batch_size, n_pre))
         spike_per_neuron = np.full((batch_size, n_pre, n_spike), np.inf, dtype=cp.float32)
+        discrete_spike_per_neuron = np.full((batch_size, n_pre, n_spike), np.inf, dtype=cp.float32)
         for s_spikes, s_n_spike in zip(spike_per_neuron, n_spike_per_neuron):
             for n_spikes, n in zip(s_spikes, s_n_spike):
                 n_spikes[:n] = np.sort(np.random.uniform(low=0.0, high=max_simulation, size=(n,)))
 
-        new_shape, sorted_indices, spike_times_reshaped = get_sorted_spikes_indices(cp.array(spike_per_neuron),
-                                                                                    cp.array(n_spike_per_neuron))
+        new_shape, sorted_indices, spike_times_reshaped, discrete_sorted_indices, discrete_spike_times_reshaped \
+            = get_sorted_spikes_indices(cp.array(spike_per_neuron),
+                                                                                    cp.array(n_spike_per_neuron),
+                                                                                    cp.array(discrete_spike_per_neuron))
         sorted_spike_indices = (sorted_indices.astype(cp.int32) // spike_per_neuron.shape[2])
         sorted_spike_times = cp.take_along_axis(spike_times_reshaped, sorted_indices, axis=1)
+        discrete_sorted_spike_indices = (discrete_sorted_indices.astype(cp.int32) // discrete_spike_per_neuron.shape[2])
+        discrete_sorted_spike_times = cp.take_along_axis(discrete_spike_times_reshaped, discrete_sorted_indices, axis=1)
 
         weights_cpu = np.random.normal(loc=0, scale=1.0, size=(n_post, n_pre))
         weights_gpu = cp.array(weights_cpu, dtype=cp.float32)
@@ -59,16 +64,19 @@ class LifLayer_tests(unittest.TestCase):
 
         input_layer = InputLayer(n_neurons=n_pre)
         hidden_layer = LIFLayer(previous_layer=input_layer, n_neurons=n_post, tau_s=tau_s, theta=theta,
+                                time_delta=0.0001,
                                 delta_theta=delta_theta,
                                 weight_initializer=weight_initializer, max_n_spike=128)
 
-        input_layer.set_spike_trains(spike_per_neuron, n_spike_per_neuron)
+        input_layer.set_spike_trains(spike_per_neuron, n_spike_per_neuron, discrete_spike_per_neuron)
         input_layer.forward(max_simulation)
         hidden_layer.forward(max_simulation)
 
-        spike_times_per_neuron, n_spike_per_neuron = hidden_layer.spike_trains
-        new_shape, sorted_indices, spike_times_reshaped = get_sorted_spikes_indices(spike_times_per_neuron,
-                                                                                    n_spike_per_neuron)
+        spike_times_per_neuron, n_spike_per_neuron, discrete_spike_per_neuron = hidden_layer.spike_trains
+        new_shape, sorted_indices, spike_times_reshaped, discrete_sorted_indices, discrete_spike_times_reshaped \
+            = get_sorted_spikes_indices(spike_times_per_neuron,
+                                                                                    n_spike_per_neuron,
+                                                                                    discrete_spike_per_neuron)
 
         spike_indices = sorted_indices // spike_times_per_neuron.shape[-1]
         spike_times = cp.take_along_axis(spike_times_reshaped, sorted_indices, axis=1)

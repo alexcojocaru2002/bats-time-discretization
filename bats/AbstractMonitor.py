@@ -38,8 +38,12 @@ class AbstractMonitor(ABC):
             return
         np.savez(self._export_path, epochs=self._epochs, values=self._values)
 
-        plt.plot(self._epochs, self._values)
+        plt.plot(self._epochs, self._values, marker='^')
+        plt.grid(True)
         plt.xlabel("Epoch")
         plt.ylabel(self._name)
         plt.savefig(self._export_path.with_suffix('.png'))
         plt.close()
+
+    def return_vals(self) -> list:
+        return self._values

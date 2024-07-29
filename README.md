@@ -1,4 +1,9 @@
-# Error Backpropagation Through Spikes (BATS)
+# Impact of time discretization on the efficiency of continuous time Spiking Neural Networks 
+
+This repository is for the research project CSE3000 at TUDelft. The project is accompanied by the following paper : . 
+The aim of this project is to add a naive time discretization to the BATS model (presented below) and to experiment with different time step sizes how accuracy affects sparsity, latency and accuracy.
+
+## Error Backpropagation Through Spikes (BATS)
 
 Error Backpropagation Through Spikes (BATS) [1] is a GPU-compatible algorithm that extends Fast & Deep [2], 
 a method to performs exact gradient descent in Deep Spiking Neural Networks (SNNs). 

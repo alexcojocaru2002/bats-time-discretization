@@ -11,18 +11,21 @@ class InputLayer(AbstractLayer):
         self.__indices: Optional[cp.ndarray] = None
         self.__times_per_neuron: Optional[cp.ndarray] = None
         self.__n_spike_per_neuron: Optional[cp.ndarray] = None
+        self.__discrete_times_per_neuron: Optional[cp.ndarray] = None
 
     @property
     def trainable(self) -> bool:
         return False
 
     @property
-    def spike_trains(self) -> Tuple[cp.ndarray, cp.ndarray]:
-        return self.__times_per_neuron, self.__n_spike_per_neuron
+    def spike_trains(self) -> Tuple[cp.ndarray, cp.ndarray, cp.ndarray]:
+        return self.__times_per_neuron, self.__n_spike_per_neuron, self.__discrete_times_per_neuron
 
-    def set_spike_trains(self, times_per_neuron: np.ndarray, n_times_per_neuron: np.ndarray) -> None:
+    def set_spike_trains(self, times_per_neuron: np.ndarray, n_times_per_neuron: np.ndarray,
+                         discrete_times_per_neuron: np.ndarray) -> None:
         self.__times_per_neuron = cp.array(times_per_neuron, dtype=cp.float32)
         self.__n_spike_per_neuron = cp.array(n_times_per_neuron, dtype=cp.int32)
+        self.__discrete_times_per_neuron = cp.array(discrete_times_per_neuron, dtype=cp.float32)
         
     @property
     def weights(self) -> Optional[cp.ndarray]:
