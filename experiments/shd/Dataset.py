@@ -67,9 +67,9 @@ class Dataset:
             #print(n)
 
         # Reshape fixed_spiketimes to (num_samples, N_NEURONS, 1)
-        fixed_spiketimes = (fixed_spiketimes / MAX_VALUE) * TIME_WINDOW
-        fixed_spiketimes[fixed_spiketimes >= TIME_WINDOW] = np.inf
-        #fixed_spiketimes = fixed_spiketimes.reshape(num_samples, N_NEURONS, 1)
+        # fixed_spiketimes = (fixed_spiketimes / MAX_VALUE) * TIME_WINDOW # scaling
+        # fixed_spiketimes[fixed_spiketimes >= TIME_WINDOW] = np.inf
+        # fixed_spiketimes = fixed_spiketimes.reshape(num_samples, N_NEURONS, 1)
         #print(fixed_spiketimes.shape)
         return fixed_spiketimes, fixed_neuron_ids, labels
 

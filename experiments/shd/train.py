@@ -19,20 +19,20 @@ from bats.Optimizers import *
 DATASET_PATH = Path("../../datasets/")
 
 N_INPUTS = 700
-SIMULATION_TIME = 0.2
+SIMULATION_TIME = 2.0
 LATENCY_TIMES_LIST = [0.02, 0.03, 0.05, 0.08, 0.1, 0.13, 0.15, 0.18, 0.2]
 
 # Hidden layer
 N_NEURONS_1 = 128
 TAU_S_1 = 0.100
-THRESHOLD_HAT_1 = 0.005
+THRESHOLD_HAT_1 = 0.0047140920718493845
 DELTA_THRESHOLD_1 = 1 * THRESHOLD_HAT_1
 SPIKE_BUFFER_SIZE_1 = 30
 
 # Output_layer
 N_OUTPUTS = 20
 TAU_S_OUTPUT = 0.100
-THRESHOLD_HAT_OUTPUT = 0.26
+THRESHOLD_HAT_OUTPUT = 0.22894365048503357
 DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
 SPIKE_BUFFER_SIZE_OUTPUT = 30
 
@@ -41,7 +41,7 @@ N_TRAINING_EPOCHS = 100
 
 N_TRAIN_SAMPLES = 8156
 N_TEST_SAMPLES = 2264
-TRAIN_BATCH_SIZE = 5
+TRAIN_BATCH_SIZE = 50
 TEST_BATCH_SIZE = 100
 N_TRAIN_BATCH = int(N_TRAIN_SAMPLES / TRAIN_BATCH_SIZE)
 N_TEST_BATCH = int(N_TEST_SAMPLES / TEST_BATCH_SIZE)
@@ -56,14 +56,17 @@ MIN_LEARNING_RATE = 1e-4
 TARGET_FALSE = 3
 TARGET_TRUE = 15
 
+
 # Plot parameters
 EXPORT_METRICS = True
 EXPORT_DIR = Path("output_metrics")
 SAVE_DIR = Path("best_model")
 
 
-#def weight_initializer(n_post: int, n_pre: int) -> cp.ndarray:
+# def weight_initializer(n_post: int, n_pre: int) -> cp.ndarray:
 #    return cp.random.uniform(-1.0, 1.0, size=(n_post, n_pre), dtype=cp.float32)
+
+
 
 def weight_initializer(n_post: int, n_pre: int) -> cp.ndarray:
     k = 1.0 / n_pre
@@ -156,6 +159,10 @@ def calculate_latency_prob(discrete_out_spikes: cp.ndarray, labels):
         probabilities_list[latency.item()] = (count_spikes / TARGET_TRUE).tolist()
     return probabilities_list
 
+print("Loading datasets...")
+dataset = Dataset(path=DATASET_PATH)
+dataset_test_hypothesis = Dataset(path=DATASET_PATH)
+
 def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
     print("This network will be trained using DT = " + str(DT))
     np.random.seed(np_seed)
@@ -166,10 +173,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
 
     if not PLOT_DIR.exists():
         PLOT_DIR.mkdir()
-    # Dataset
-    print("Loading datasets...")
-    dataset = Dataset(path=DATASET_PATH)
-    dataset_test_hypothesis = Dataset(path=DATASET_PATH)
+
 
     print("Creating network...")
     network = Network()
@@ -280,6 +284,11 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
             #print(np.max(avg_gradient[1].get().flatten()) - np.min(avg_gradient[1].get().flatten()))
 
             # Apply step
+            # Plot average gradient
+            # if batch_idx % 10 == 0:
+            #     plt.hist(avg_gradient[1].get().flatten())
+            #     plt.show()
+
             deltas = optimizer.step(avg_gradient)
             del avg_gradient
 
@@ -376,9 +385,20 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                 network.reset()
                 network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
                 out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-                scatter_plot_spike_times(input_layer.spike_trains[2].get()[0],
-                                         hidden_layer.spike_trains[2].get()[0], out_spikes.get()[0],
-                                         discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
+                p = 0
+                for p in range(0, len(labels)):
+                    if labels[p] == 0:
+                        break
+                if labels[p] == 0:
+                    print("Printing a spoken 0 input")
+                    scatter_plot_spike_times(input_layer.spike_trains[2].get()[p],
+                                             hidden_layer.spike_trains[2].get()[p], out_spikes.get()[p],
+                                             discrete_out_spikes.get()[p], labels[p], DT, plot_count, PLOT_DIR)
+                else:
+                    print("Printing a random spoken input")
+                    scatter_plot_spike_times(input_layer.spike_trains[2].get()[0],
+                                             hidden_layer.spike_trains[2].get()[0], out_spikes.get()[0],
+                                             discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
                 plot_count = plot_count + 1
 
                 #plot_heatmap(output_layer.weights.get(), 'Weight Heatmap Output Layer')
@@ -404,7 +424,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                     print(f"Best accuracy: {np.around(best_acc, 2)}%, Networks save to: {SAVE_DIR}")
     test_monitors_manager.export()
     train_monitors_manager.export()
-    return test_monitors_manager, train_monitors_manager, output_spike_count_target, overall_average_probabilities
+    return test_monitors_manager, train_monitors_manager, output_spike_count_target, overall_average_probabilities, best_acc
 
 
 def calculate_average_across_experiments(results):
@@ -466,7 +486,7 @@ if __name__ == "__main__":
                     #SPIKE_BUFFER_SIZE_OUTPUT = toutput
             DT = val
             PLOT_DIR = Path('./scatter_plots/' + 'DT = ' + str(val))
-            test_monitor, train_monitor, output_spike_target, all_discrete_spikes = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR)
+            test_monitor, train_monitor, output_spike_target, all_discrete_spikes, _ = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR)
             #print(all_discrete_spikes)
             df = train_monitor.return_vals()
             df2 = test_monitor.return_vals()

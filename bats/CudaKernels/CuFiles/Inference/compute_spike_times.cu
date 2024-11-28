@@ -85,7 +85,7 @@ extern "C" {
 
             // Discretize to next time step
             if (time_delta != 0.0f)
-            	//tmp = tmp + (time_delta - fmodf(tmp, time_delta)); // ¬t_k
+            	//tmp = tmp + (time_delta - fmodf(tmp, time_delta)); // t_k
                 discrete_spike_times[*n_spikes] = tmp + (time_delta - fmodf(tmp, time_delta));
             else
                 discrete_spike_times[*n_spikes] = tmp;
