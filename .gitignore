@@ -2,4 +2,4 @@
 /experiments/*/best_model
 /experiments/*/scatter_plots
 /experiments/*/output_metrics
-/datasets/*/
+/datasets/

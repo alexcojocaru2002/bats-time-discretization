@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5d4fef14-4bef-4625-a325-a4a52abef900" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2ljhJ9ET7jSr8FSsXvPf0xSmhm4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Dataset.executor": "Run",
+    "Python.experiments.executor": "Run",
+    "Python.mnist.executor": "Run",
+    "Python.shd.executor": "Run",
+    "Python.smnist.executor": "Run",
+    "Python.test_dataset.executor": "Run",
+    "Python.train_og.executor": "Run",
+    "Python.train_spike_count.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Work/RP/bats-time-discretization",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Work\RP\bats-time-discretization\experiments\mnist" />
+      <recent name="C:\Work\RP\bats-time-discretization\experiments\smnist" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="pip install torch" />
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="mnist" type="PythonConfigurationType" factoryName="Python">
+      <module name="bats-time-discretization" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12" />
+      <option name="WORKING_DIRECTORY" value="C:\Work\RP\bats-time-discretization\experiments\mnist" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/mnist/train_spike_count.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="shd" type="PythonConfigurationType" factoryName="Python">
+      <module name="bats-time-discretization" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12" />
+      <option name="WORKING_DIRECTORY" value="C:\Work\RP\bats-time-discretization\experiments\shd" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/shd/train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="smnist" type="PythonConfigurationType" factoryName="Python">
+      <module name="bats-time-discretization" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12" />
+      <option name="WORKING_DIRECTORY" value="C:\Work\RP\bats-time-discretization\experiments\smnist" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/smnist/train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.mnist" />
+      <item itemvalue="Python.shd" />
+      <item itemvalue="Python.smnist" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PY-242.21829.153" />
+        <option value="bundled-python-sdk-464836ebc622-b74155a9e76b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.21829.153" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5d4fef14-4bef-4625-a325-a4a52abef900" name="Changes" comment="" />
+      <created>1725699318970</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1725699318970</updated>
+      <workItem from="1725699319993" duration="3177000" />
+      <workItem from="1725702964818" duration="513000" />
+      <workItem from="1725703831316" duration="1564000" />
+      <workItem from="1725705929955" duration="604000" />
+      <workItem from="1725781508919" duration="678000" />
+      <workItem from="1725782201144" duration="666000" />
+      <workItem from="1725782949801" duration="1000" />
+      <workItem from="1725783117269" duration="1000" />
+      <workItem from="1725866968856" duration="5186000" />
+      <workItem from="1725994884913" duration="2000" />
+      <workItem from="1725994986313" duration="1000" />
+      <workItem from="1726050890788" duration="1672000" />
+      <workItem from="1726077932929" duration="1000" />
+      <workItem from="1726127081440" duration="1000" />
+      <workItem from="1726150224999" duration="1000" />
+      <workItem from="1726156342956" duration="1000" />
+      <workItem from="1726180512095" duration="1000" />
+      <workItem from="1726322188087" duration="5000" />
+      <workItem from="1726386256308" duration="2000" />
+      <workItem from="1726470791303" duration="3877000" />
+      <workItem from="1726477535669" duration="8178000" />
+      <workItem from="1726564852523" duration="1590000" />
+      <workItem from="1726647702361" duration="2913000" />
+      <workItem from="1726655024766" duration="6937000" />
+      <workItem from="1726675047679" duration="1000" />
+      <workItem from="1726675055606" duration="5946000" />
+      <workItem from="1726759321751" duration="3000" />
+      <workItem from="1726768740820" duration="3000" />
+      <workItem from="1726770655874" duration="1000" />
+      <workItem from="1726818274130" duration="105000" />
+      <workItem from="1727000237666" duration="2000" />
+      <workItem from="1727087099539" duration="4162000" />
+      <workItem from="1727119179152" duration="6279000" />
+      <workItem from="1727166595684" duration="11737000" />
+      <workItem from="1727209447858" duration="1000" />
+      <workItem from="1727271349388" duration="1000" />
+      <workItem from="1727283019853" duration="431000" />
+      <workItem from="1727532906045" duration="22000" />
+      <workItem from="1727627900084" duration="224000" />
+      <workItem from="1727905827192" duration="1808000" />
+      <workItem from="1728678382240" duration="755000" />
+      <workItem from="1729116637670" duration="1867000" />
+      <workItem from="1729340615786" duration="596000" />
+      <workItem from="1729422871909" duration="2106000" />
+      <workItem from="1732802596399" duration="944000" />
+      <workItem from="1732803548046" duration="5439000" />
+      <workItem from="1732864091721" duration="6666000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/bats/CudaKernels/Wrappers/Inference/compute_pre_exps.py</url>
+          <line>10</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/bats_time_discretization$Dataset.coverage" NAME="Dataset Coverage Results" MODIFIED="1726661519444" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$smnist.coverage" NAME="smnist Coverage Results" MODIFIED="1726664268723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\smnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$test_dataset.coverage" NAME="test_dataset Coverage Results" MODIFIED="1726664055812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$train_spike_count.coverage" NAME="train_spike_count Coverage Results" MODIFIED="1725701225755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$shd.coverage" NAME="shd Coverage Results" MODIFIED="1728678599361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\shd" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$mnist.coverage" NAME="mnist Coverage Results" MODIFIED="1732810806250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$train_og.coverage" NAME="train_og Coverage Results" MODIFIED="1729117424748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/shd" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$experiments.coverage" NAME="experiments Coverage Results" MODIFIED="1732874330961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+  </component>
+</project>
