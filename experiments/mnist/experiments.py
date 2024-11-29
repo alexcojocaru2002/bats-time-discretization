@@ -132,7 +132,7 @@ def train(network, DT, np_seed, cp_seed):
         # Dataset
         print("Loading datasets...")
         dataset = Dataset(path=DATASET_PATH)
-        dataset_test_hypothesis = Dataset(path=DATASET_PATH)
+        # dataset_test_hypothesis = Dataset(path=DATASET_PATH)
 
         print("Creating network...")
 
@@ -207,53 +207,7 @@ def train(network, DT, np_seed, cp_seed):
 
                 # Test evaluation
                 if training_steps % TEST_PERIOD_STEP == 0:
-                    test_time_monitor.start()
-                    for batch_idx in range(N_TEST_BATCH):
-                        spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
-                        if DT != 0.0:
-                            discrete_spikes = discrete(spikes, DT)
-                        else:
-                            discrete_spikes = spikes
-                        network.reset()
-                        network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
-                        out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-
-                        pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
-                        loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
-
-                        pred_cpu = pred.get()
-                        loss_cpu = loss.get()
-                        test_loss_monitor.add(loss_cpu)
-                        test_accuracy_monitor.add(pred_cpu, labels)
-
-                        for l, mon in test_spike_counts_monitors.items():
-                            mon.add(l.spike_trains[1])
-
-                        for l, mon in test_silent_monitors.items():
-                            mon.add(l.spike_trains[1])
-
-                    # Here we want to test how the network performs on the same dataset throughout training
-                    # Testing hypothesis if spikes get pushed earlier and discretization does not affect so much later epochs
-                    spikes, n_spikes, labels = dataset_test_hypothesis.get_test_batch(0,
-                                                                                      TEST_BATCH_SIZE)  # Using input 0
-                    if DT != 0.0:
-                        discrete_spikes = discrete(spikes, DT)
-                    else:
-                        discrete_spikes = spikes
-                    network.reset()
-                    network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
-                    out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-                    plot_count = plot_count + 1
-
-                    for l, mon in test_norm_monitors.items():
-                        mon.add(l.weights)
-                    test_learning_rate_monitor.add(optimizer.learning_rate)
-
-                    records = test_monitors_manager.record(epoch_metrics)
-                    test_monitors_manager.print(epoch_metrics)
-                    # test_monitors_manager.export()
-
-                    acc = records[test_accuracy_monitor]
+                    acc = test(dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
                     if acc > best_acc:
                         best_acc = acc
                         network.store(SAVE_DIR / ("DT = " + str(DT)))
@@ -261,6 +215,53 @@ def train(network, DT, np_seed, cp_seed):
         test_monitors_manager.export()
         train_monitors_manager.export()
         return test_monitors_manager, train_monitors_manager
+
+def test(dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor):
+    test_time_monitor.start()
+    for batch_idx in range(N_TEST_BATCH):
+        spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
+        if DT != 0.0:
+            discrete_spikes = discrete(spikes, DT)
+        else:
+            discrete_spikes = spikes
+        network.reset()
+        network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
+        out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
+
+        pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
+        loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
+
+        pred_cpu = pred.get()
+        loss_cpu = loss.get()
+        test_loss_monitor.add(loss_cpu)
+        test_accuracy_monitor.add(pred_cpu, labels)
+
+        for l, mon in test_spike_counts_monitors.items():
+            mon.add(l.spike_trains[1])
+
+        for l, mon in test_silent_monitors.items():
+            mon.add(l.spike_trains[1])
+    # Here we want to test how the network performs on the same dataset throughout training
+    # Testing hypothesis if spikes get pushed earlier and discretization does not affect so much later epochs
+    # spikes, n_spikes, labels = dataset.get_test_batch(0,TEST_BATCH_SIZE)  # Using input 0
+    # if DT != 0.0:
+    #     discrete_spikes = discrete(spikes, DT)
+    # else:
+    #     discrete_spikes = spikes
+    # network.reset()
+    # network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
+    # out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
+
+    for l, mon in test_norm_monitors.items():
+        mon.add(l.weights)
+    test_learning_rate_monitor.add(optimizer.learning_rate)
+
+    records = test_monitors_manager.record(epoch_metrics)
+    test_monitors_manager.print(epoch_metrics)
+    # test_monitors_manager.export()
+
+    acc = records[test_accuracy_monitor]
+    return acc
 
 def create_network():
     network = Network()
