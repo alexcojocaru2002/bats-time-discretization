@@ -85,7 +85,7 @@ def discrete(spikes: cp.ndarray, DT: float):
     discrete_spikes[finite_mask] = discrete_spikes_finite
     return discrete_spikes
 
-def add_monitors():
+def add_monitors(network):
     # Metrics
     train_loss_monitor = LossMonitor(export_path=EXPORT_DIR / "loss_train")
     train_accuracy_monitor = AccuracyMonitor(export_path=EXPORT_DIR / "accuracy_train")
@@ -140,12 +140,12 @@ def train(network, DT, np_seed, cp_seed):
         loss_fct = SpikeCountClassLoss(target_false=TARGET_FALSE, target_true=TARGET_TRUE)
         optimizer = AdamOptimizer(learning_rate=LEARNING_RATE)
 
-        train_monitors_manager, train_accuracy_monitor, train_loss_monitor, train_time_monitor, train_silent_label_monitor, test_monitors_manager, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_time_monitor, test_norm_monitors, test_learning_rate_monitor, test_spike_counts_monitors = add_monitors()
+        train_monitors_manager, train_accuracy_monitor, train_loss_monitor, train_time_monitor, train_silent_label_monitor, test_monitors_manager, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_time_monitor, test_norm_monitors, test_learning_rate_monitor, test_spike_counts_monitors = add_monitors(network)
         best_acc = 0.0
         print("Training...")
 
-        if (SAVE_DIR / ("DT = " + str(DT))).exists():
-            network.restore(SAVE_DIR / ("DT = " + str(DT)))
+        # if (SAVE_DIR / ("DT = " + str(DT))).exists():
+        #     network.restore(SAVE_DIR / ("DT = " + str(DT)))
 
         training_steps = 0
         for epoch in range(N_TRAINING_EPOCHS):
@@ -207,16 +207,15 @@ def train(network, DT, np_seed, cp_seed):
 
                 # Test evaluation
                 if training_steps % TEST_PERIOD_STEP == 0:
-                    acc = test(dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
+                    acc = test(network, dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
                     if acc > best_acc:
                         best_acc = acc
                         network.store(SAVE_DIR / ("DT = " + str(DT)))
                         print(f"Best accuracy: {np.around(best_acc, 2)}%, Networks save to: {SAVE_DIR}")
         test_monitors_manager.export()
         train_monitors_manager.export()
-        return test_monitors_manager, train_monitors_manager
 
-def test(dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor):
+def test(network, dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor):
     test_time_monitor.start()
     for batch_idx in range(N_TEST_BATCH):
         spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
