@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d4fef14-4bef-4625-a325-a4a52abef900" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/experiments/mnist/analysis_experiments_1_layer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/mnist/analysis_experiments_more_layers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/mnist/experiments.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/experiments.py" afterDir="false" />
     </list>
@@ -31,28 +33,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Dataset.executor&quot;: &quot;Run&quot;,
-    &quot;Python.experiments.executor&quot;: &quot;Run&quot;,
-    &quot;Python.mnist.executor&quot;: &quot;Run&quot;,
-    &quot;Python.shd.executor&quot;: &quot;Run&quot;,
-    &quot;Python.smnist.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_dataset.executor&quot;: &quot;Run&quot;,
-    &quot;Python.train_og.executor&quot;: &quot;Run&quot;,
-    &quot;Python.train_spike_count.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Work/RP/bats-time-discretization&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Dataset.executor": "Run",
+    "Python.analysis_experiments.executor": "Run",
+    "Python.analysis_experiments_1_layer.executor": "Run",
+    "Python.analysis_experiments_more_layers.executor": "Run",
+    "Python.experiments.executor": "Run",
+    "Python.mnist.executor": "Run",
+    "Python.shd.executor": "Run",
+    "Python.smnist.executor": "Run",
+    "Python.test_dataset.executor": "Run",
+    "Python.train_og.executor": "Run",
+    "Python.train_spike_count.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "analysis__experiments",
+    "last_opened_file_path": "C:/Work/RP/bats-time-discretization/experiments/mnist",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Work\RP\bats-time-discretization\experiments\mnist" />
@@ -64,7 +69,7 @@
       <command value="pip install torch" />
     </option>
   </component>
-  <component name="RunManager" selected="Python.mnist">
+  <component name="RunManager">
     <configuration name="mnist" type="PythonConfigurationType" factoryName="Python">
       <module name="bats-time-discretization" />
       <option name="ENV_FILES" value="" />
@@ -206,6 +211,9 @@
       <workItem from="1732802596399" duration="944000" />
       <workItem from="1732803548046" duration="5439000" />
       <workItem from="1732864091721" duration="6273000" />
+      <workItem from="1733474563899" duration="13411000" />
+      <workItem from="1733697261127" duration="718000" />
+      <workItem from="1733732577796" duration="13355000" />
     </task>
     <servers />
   </component>
@@ -223,25 +231,17 @@
       </map>
     </option>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/bats/CudaKernels/Wrappers/Inference/compute_pre_exps.py</url>
-          <line>10</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/bats_time_discretization$Dataset.coverage" NAME="Dataset Coverage Results" MODIFIED="1726661519444" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$smnist.coverage" NAME="smnist Coverage Results" MODIFIED="1726664268723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\smnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$test_dataset.coverage" NAME="test_dataset Coverage Results" MODIFIED="1726664055812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments.coverage" NAME="analysis_experiments Coverage Results" MODIFIED="1733737767496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments_more_layers.coverage" NAME="analysis_experiments_more_layers Coverage Results" MODIFIED="1733750784336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$train_spike_count.coverage" NAME="train_spike_count Coverage Results" MODIFIED="1725701225755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments_1_layer.coverage" NAME="analysis_experiments_1_layer Coverage Results" MODIFIED="1733739709146" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$shd.coverage" NAME="shd Coverage Results" MODIFIED="1728678599361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\shd" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$mnist.coverage" NAME="mnist Coverage Results" MODIFIED="1732810806250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$mnist.coverage" NAME="mnist Coverage Results" MODIFIED="1733735152155" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$train_og.coverage" NAME="train_og Coverage Results" MODIFIED="1729117424748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/shd" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$experiments.coverage" NAME="experiments Coverage Results" MODIFIED="1732877569192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$experiments.coverage" NAME="experiments Coverage Results" MODIFIED="1733399288857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
   </component>
 </project>
