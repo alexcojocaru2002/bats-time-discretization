@@ -10,15 +10,17 @@ import sys
 
 sys.path.insert(0, "../../")  # Add repository root to python path
 
-from Dataset import Dataset
 from bats.Monitors import *
 from bats.Layers import InputLayer, LIFLayer
 from bats.Losses import *
 from bats.Network import Network
 from bats.Optimizers import *
 
+from Dataset import Dataset as Dataset_Mnist
 # Dataset
-DATASET_PATH = Path("../../datasets/mnist.npz")
+DATASET_PATH_FMNIST = Path("../../datasets/")
+DATASET_PATH_EMNIST = Path("../../datasets/emnist-balanced.mat")
+DATASET_PATH_MNIST = Path("../../datasets/mnist.npz")
 
 N_INPUTS = 28 * 28
 SIMULATION_TIME = 0.2
@@ -56,7 +58,7 @@ MIN_LEARNING_RATE = 0
 TARGET_FALSE = 3
 TARGET_TRUE = 15
 
-DT = 0.008
+DT = 0.001
 DT_LIST = [0.001, 0.008]
 
 def show_spike_differences(input_spike_times_continuous, input_spike_times_discrete, hidden_spike_times_continuous, hidden_spike_times_discrete, output_spikes_times, discrete_output_spike_times, label, DT, timestep, PLOT_DIR):
@@ -268,23 +270,30 @@ NR_EXPERIMENTS = 10
 
 
 print("Loading datasets...")
-dataset = Dataset(path=DATASET_PATH)
+
 # dataset_test_hypothesis = Dataset(path=DATASET_PATH)
 loss_fct = SpikeCountClassLoss(target_false=TARGET_FALSE, target_true=TARGET_TRUE)
 optimizer = AdamOptimizer(learning_rate=LEARNING_RATE)
 
-network_configs=[[800], [800, 800], [800, 800, 800], [800, 800, 800, 800], [800, 800, 800, 800, 800], [800, 800, 800, 800, 800, 800], [800, 800, 800, 800, 800, 800, 800], [800, 800, 800, 800, 800, 800, 800, 800], [800, 800, 800, 800, 800, 800, 800, 800, 800], [800, 800, 800, 800, 800, 800, 800, 800, 800, 800],[800, 800, 800, 800, 800, 800, 800, 800, 800, 800, 800], [800, 800, 800, 800, 800, 800, 800, 800, 800, 800, 800, 800]] # Problem, make sure the biggest network is last!
+network_configs=[[800, 800], [800, 800, 800, 800, 800, 800, 800]] # Problem, make sure the biggest network is last!
+dataset = Dataset_Mnist(path=DATASET_PATH_FMNIST)
+# dataset_emnist = Dataset_Emnist(path=DATASET_PATH_EMNIST)
+# dataset_fmnist = Dataset_Fmnist(path=DATASET_PATH_FMNIST)
+
+dataset_name = 'Fashion MNIST'
 
 network = create_network(network_configs[-1]) # Because of the DF initialization
 
 mse = pd.DataFrame()
 mse['Layers'] = np.zeros((len(network_configs), ))
 mse['Spike Count'] = np.empty((len(network_configs), ))
+mse['Dataset'] = np.empty((len(network_configs), ))
 
 # Add columns to track both average and standard deviation
 for layer in network.layers:
     mse[layer.name] = np.zeros((len(network_configs), ))  # For average MSE loss
     mse[layer.name + ' StdDev'] = np.zeros((len(network_configs), ))  # For standard deviation
+
 for layer in network.layers:
     mse['Spike Count ' + layer.name] = np.zeros((len(network_configs), ))
 
@@ -292,51 +301,51 @@ for layer in network.layers:
 layer_losses = {layer.name: [[] for _ in range(len(network_configs))] for layer in network.layers}
 
 for i, config in enumerate(network_configs):
-    mse['Layers'][i] = len(config)
-    print("Creating network for network with " + str(len(config)) + " layers")
+        mse['Layers'][i] = len(config)
+        mse['Dataset'][i] = dataset_name
+        print("Creating network for network with " + str(len(config)) + " layers")
 
-    for experiment in range(NR_EXPERIMENTS):
-        print(f"Experiment {experiment + 1}/{NR_EXPERIMENTS} for network with {len(config)} layers")
-        network = create_network(config)
-        (train_monitors_manager, train_accuracy_monitor, train_loss_monitor,
-         train_time_monitor, train_silent_label_monitor, test_monitors_manager,
-         test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_time_monitor,
-         test_norm_monitors, test_learning_rate_monitor, test_spike_counts_monitors) = add_monitors(
-            network)
+        for experiment in range(NR_EXPERIMENTS):
+            print(f"Experiment {experiment + 1}/{NR_EXPERIMENTS} for network with {len(config)} layers")
+            network = create_network(config)
+            (train_monitors_manager, train_accuracy_monitor, train_loss_monitor,
+             train_time_monitor, train_silent_label_monitor, test_monitors_manager,
+             test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_time_monitor,
+             test_norm_monitors, test_learning_rate_monitor, test_spike_counts_monitors) = add_monitors(
+                network)
 
-        test(network, dataset, loss_fct, 1.0, optimizer, test_time_monitor, test_accuracy_monitor,
-             test_loss_monitor, test_silent_monitors, test_monitors_manager,
-             test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
+            test(network, dataset, loss_fct, 1.0, optimizer, test_time_monitor, test_accuracy_monitor,
+                 test_loss_monitor, test_silent_monitors, test_monitors_manager,
+                 test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
 
-        spikes, n_spikes, labels = dataset.get_test_batch(0, TEST_BATCH_SIZE)
-        out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
+            spikes, n_spikes, labels = dataset.get_test_batch(0, TEST_BATCH_SIZE)
+            out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
 
+
+            for layer in network.layers:
+                loss = mse_loss(layer.spike_trains[0].get()[0], layer.spike_trains[2].get()[0])
+                mse[layer.name][i] += loss  # Accumulate the loss directly in the DataFrame
+                layer_losses[layer.name][i].append(loss)  # Store the loss for variance calculation
+                mse['Spike Count'][i] += len(
+                    layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
+                )
+                mse['Spike Count ' + layer.name][i] += len(
+                    layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
+                )
+
+        # Average the results after all experiments
+        mse['Spike Count'][i] /= NR_EXPERIMENTS
         for layer in network.layers:
-            loss = mse_loss(layer.spike_trains[0].get()[0], layer.spike_trains[2].get()[0])
-            mse[layer.name][i] += loss  # Accumulate the loss directly in the DataFrame
-            layer_losses[layer.name][i].append(loss)  # Store the loss for variance calculation
-            mse['Spike Count'][i] += len(
-                layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
-            )
-            mse['Spike Count ' + layer.name][i] += len(
-                layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
-            )
+            mse[layer.name][i] /= NR_EXPERIMENTS  # Average the loss for each layer
 
-    # Average the results after all experiments
-    mse['Spike Count'][i] /= NR_EXPERIMENTS
-    for layer in network.layers:
-        mse[layer.name][i] /= NR_EXPERIMENTS  # Average the loss for each layer
+            # Compute standard deviation
+            mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
 
-        # Compute standard deviation
-        mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
-
-print(mse.to_csv(index=False))
+mse.to_csv("mnist_experiments", index=False)
 
 def plot_mse_stdev(mse_df):
     # Iterate over each layer configuration (row) in the DataFrame
     for i, row in mse_df.iterrows():
-        print("Plotting layer " + str(i))
-
         layer_configuration = int(row["Layers"])
 
         # Extract MSE and StdDev columns for this configuration, ignoring Output Layer
@@ -366,7 +375,7 @@ def plot_mse_stdev(mse_df):
         # Customize the plot
         plt.xlabel("Layer", fontsize=12)
         plt.ylabel("MSE", fontsize=12)
-        plt.title(f"Layer Configuration {layer_configuration}: MSE and StdDev (Excluding Output Layer)", fontsize=14)
+        plt.title(f"Layer Configuration {layer_configuration}: MSE and StdDev (For Fashion MNIST)", fontsize=14)
         plt.xticks(rotation=45, ha="right")
         plt.grid(axis="y", linestyle="--", alpha=0.6)
         plt.tight_layout()
