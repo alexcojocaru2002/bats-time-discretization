@@ -43,7 +43,7 @@ DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
 SPIKE_BUFFER_SIZE_OUTPUT = 20
 
 # Training parameters
-N_TRAINING_EPOCHS = 10
+N_TRAINING_EPOCHS = 100
 N_TRAIN_SAMPLES = 60000
 N_TEST_SAMPLES = 10000
 TRAIN_BATCH_SIZE = 5
@@ -245,8 +245,6 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
     test_monitors_manager = MonitorsManager(all_test_monitors,
                                             print_prefix="Test | ")
 
-    output_spike_count_target = []
-    overall_average_probabilities = []
     best_acc = 0
 
     for epoch in range(N_TRAINING_EPOCHS):
@@ -334,14 +332,14 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                     out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
 
                     # This is for latency
-                    probabilities_list = calculate_latency_prob(discrete_out_spikes, labels)
-                    # Calculate the average probabilities for each latency time using CuPy
-                    average_probabilities = {latency: np.mean(probabilities) for latency, probabilities in
-                                             probabilities_list.items()}
+                    # probabilities_list = calculate_latency_prob(discrete_out_spikes, labels)
+                    # # Calculate the average probabilities for each latency time using CuPy
+                    # average_probabilities = {latency: np.mean(probabilities) for latency, probabilities in
+                    #                          probabilities_list.items()}
 
                     # Display the results
-                    for latency, avg_prob in average_probabilities.items():
-                        cumulative_probabilities[latency].append(avg_prob)
+                    # for latency, avg_prob in average_probabilities.items():
+                    #     cumulative_probabilities[latency].append(avg_prob)
 
                     pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
                     loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
@@ -359,26 +357,26 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
 
                 # Here we want to test how the network performs on the same dataset throughout training
                 # Testing hypothesis if spikes get pushed earlier and discretization does not affect so much later epochs
-                spikes, n_spikes, labels = dataset_test_hypothesis.get_test_batch(0,
-                                                                                  TEST_BATCH_SIZE)  # Using input 0
-                if DT != 0.0:
-                    discrete_spikes = discrete(spikes, DT)
-                else:
-                    discrete_spikes = spikes
-                network.reset()
-                network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
-                out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-                scatter_plot_spike_times(input_layer.spike_trains[2].get()[0],
-                                         hidden_layer.spike_trains[2].get()[0], hidden_layer_2.spike_trains[2].get()[0],
-                                         out_spikes.get()[0], discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
-                plot_count = plot_count + 1
-                plot_heatmap(output_layer.weights.get())
+                # spikes, n_spikes, labels = dataset_test_hypothesis.get_test_batch(0,
+                #                                                                   TEST_BATCH_SIZE)  # Using input 0
+                # if DT != 0.0:
+                #     discrete_spikes = discrete(spikes, DT)
+                # else:
+                #     discrete_spikes = spikes
+                # network.reset()
+                # network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
+                # out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
+                # scatter_plot_spike_times(input_layer.spike_trains[2].get()[0],
+                #                          hidden_layer.spike_trains[2].get()[0], hidden_layer_2.spike_trains[2].get()[0],
+                #                          out_spikes.get()[0], discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
+                # plot_count = plot_count + 1
+                # plot_heatmap(output_layer.weights.get())
 
                 for l, mon in test_norm_monitors.items():
                     mon.add(l.weights)
 
-                overall_average_probabilities.append({latency: np.mean(probabilities) for latency, probabilities in
-                                                      cumulative_probabilities.items()})
+                # overall_average_probabilities.append({latency: np.mean(probabilities) for latency, probabilities in
+                #                                       cumulative_probabilities.items()})
                 # print(overall_average_probabilities)
 
                 test_learning_rate_monitor.add(optimizer.learning_rate)
@@ -394,7 +392,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                     print(f"Best accuracy: {np.around(best_acc, 2)}%, Networks save to: {SAVE_DIR}")
     test_monitors_manager.export()
     train_monitors_manager.export()
-    return test_monitors_manager, train_monitors_manager, output_spike_count_target, overall_average_probabilities
+    return test_monitors_manager, train_monitors_manager
 
 def calculate_average_across_experiments(results):
     average_results = {}
@@ -438,7 +436,7 @@ if __name__ == "__main__":
     all_results_test = []
     #np_seeds = [1399766615]
     #cp_seeds = [40394794]
-    DT_list = [0.003]
+    DT_list = [0.003, 0.007, 0.00]
     for i in range(0, NR_EXPERIMENTS):
         print("STARTING RUN NUMBER " + str(i))
         print("\n")
@@ -456,18 +454,18 @@ if __name__ == "__main__":
             DT = val
             PLOT_DIR = Path('./scatter_plots/' + 'DT = ' + str(val))
 
-            test_monitor, train_monitor, output_spike_target, all_discrete_spikes = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR)
+            test_monitor, train_monitor = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR)
 
             df = train_monitor.return_vals()
             df2 = test_monitor.return_vals()
-            df3 = pd.DataFrame(all_discrete_spikes)
+            # df3 = pd.DataFrame(all_discrete_spikes)
 
             df.to_csv(EXPORT_DIR / ("Train DT = " + str(val)), index=False)
             df2.to_csv(EXPORT_DIR / ("Test DT = " + str(val)), index=False)
-            df3.to_csv(EXPORT_DIR / ("Prediction Confidence DT = " + str(val)), index=False)
+            # df3.to_csv(EXPORT_DIR / ("Prediction Confidence DT = " + str(val)), index=False)
         #all_results.append(train_model_results)
         #all_results_test.append(test_model_results)
     #average_results = calculate_average_across_experiments(all_results)
     #average_results_test = calculate_average_across_experiments(all_results_test)
     #plot_metrics_across_dt(average_results)
-    #plot_metrics_across_dt(average_results_test)
+    #plot_metrics_across_dt(average_results_test)+
