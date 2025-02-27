@@ -1,0 +1,13 @@
+name: bats_requirements
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python  # Uses the default Python version in your Conda installation
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - pip:
+      - cupy-cuda11x  # Install CuPy for CUDA 11.x
