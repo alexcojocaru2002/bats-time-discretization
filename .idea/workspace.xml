@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d4fef14-4bef-4625-a325-a4a52abef900" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/experiments.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/experiments.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 1_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 1_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 2_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 2_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Output layer_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Output layer_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 1_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 1_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 2_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 2_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Output layer_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Output layer_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 1_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 1_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 2_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 2_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Output layer_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Output layer_weights.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,16 +44,22 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.Dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_datasets.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_experiments.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_experiments_1_layer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_experiments_different_datasets.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_experiments_more_layers.executor&quot;: &quot;Run&quot;,
     &quot;Python.experiments.executor&quot;: &quot;Run&quot;,
     &quot;Python.mnist.executor&quot;: &quot;Run&quot;,
     &quot;Python.shd.executor&quot;: &quot;Run&quot;,
     &quot;Python.smnist.executor&quot;: &quot;Run&quot;,
     &quot;Python.test_dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train.executor&quot;: &quot;Run&quot;,
     &quot;Python.train_og.executor&quot;: &quot;Run&quot;,
     &quot;Python.train_spike_count.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Work/RP/bats-time-discretization&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;analysis__experiments&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Work/RP/bats-time-discretization&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -55,6 +71,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Work\RP\bats-time-discretization\experiments\emnist" />
+      <recent name="C:\Work\RP\bats-time-discretization\experiments\fashion_mnist" />
       <recent name="C:\Work\RP\bats-time-discretization\experiments\mnist" />
       <recent name="C:\Work\RP\bats-time-discretization\experiments\smnist" />
     </key>
@@ -65,6 +83,29 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.mnist">
+    <configuration name="analysis_experiments_different_datasets" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="bats-time-discretization" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/mnist" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/mnist/analysis_experiments_different_datasets.py" />
+      <option name="PARAMETERS" value="-m" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="mnist" type="PythonConfigurationType" factoryName="Python">
       <module name="bats-time-discretization" />
       <option name="ENV_FILES" value="" />
@@ -138,16 +179,22 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.analysis_experiments_different_datasets" />
       <item itemvalue="Python.mnist" />
       <item itemvalue="Python.shd" />
       <item itemvalue="Python.smnist" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.analysis_experiments_different_datasets" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PY-242.21829.153" />
-        <option value="bundled-python-sdk-464836ebc622-b74155a9e76b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.21829.153" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.220" />
+        <option value="bundled-python-sdk-0fc6c617c4bd-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.220" />
       </set>
     </attachedChunks>
   </component>
@@ -206,6 +253,27 @@
       <workItem from="1732802596399" duration="944000" />
       <workItem from="1732803548046" duration="5439000" />
       <workItem from="1732864091721" duration="6273000" />
+      <workItem from="1733474563899" duration="13411000" />
+      <workItem from="1733697261127" duration="718000" />
+      <workItem from="1733732577796" duration="13355000" />
+      <workItem from="1733846154555" duration="103000" />
+      <workItem from="1733903880259" duration="611000" />
+      <workItem from="1734016812647" duration="2169000" />
+      <workItem from="1734076388079" duration="3954000" />
+      <workItem from="1734080459149" duration="268000" />
+      <workItem from="1734080734606" duration="4366000" />
+      <workItem from="1734088749703" duration="1900000" />
+      <workItem from="1734091573370" duration="7465000" />
+      <workItem from="1734275258175" duration="595000" />
+      <workItem from="1734336444675" duration="42000" />
+      <workItem from="1736942172972" duration="1948000" />
+      <workItem from="1737051203805" duration="44000" />
+      <workItem from="1737229941244" duration="735000" />
+      <workItem from="1738858895555" duration="311000" />
+      <workItem from="1738859447179" duration="10433000" />
+      <workItem from="1738878539276" duration="7099000" />
+      <workItem from="1739556041250" duration="8000" />
+      <workItem from="1739557025554" duration="18000" />
     </task>
     <servers />
   </component>
@@ -223,25 +291,22 @@
       </map>
     </option>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/bats/CudaKernels/Wrappers/Inference/compute_pre_exps.py</url>
-          <line>10</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/bats_time_discretization$Dataset.coverage" NAME="Dataset Coverage Results" MODIFIED="1726661519444" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments_1_layer.coverage" NAME="analysis_experiments_1_layer Coverage Results" MODIFIED="1733739709146" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$experiments.coverage" NAME="experiments Coverage Results" MODIFIED="1733399288857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$smnist.coverage" NAME="smnist Coverage Results" MODIFIED="1726664268723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\smnist" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$test_dataset.coverage" NAME="test_dataset Coverage Results" MODIFIED="1726664055812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$Dataset.coverage" NAME="Dataset Coverage Results" MODIFIED="1726661519444" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$train_spike_count.coverage" NAME="train_spike_count Coverage Results" MODIFIED="1725701225755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$shd.coverage" NAME="shd Coverage Results" MODIFIED="1728678599361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\shd" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$mnist.coverage" NAME="mnist Coverage Results" MODIFIED="1732810806250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$shd.coverage" NAME="shd Coverage Results" MODIFIED="1734080906111" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\shd" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$test_dataset.coverage" NAME="test_dataset Coverage Results" MODIFIED="1726664055812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/smnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments_more_layers.coverage" NAME="analysis_experiments_more_layers Coverage Results" MODIFIED="1734102151106" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments_different_datasets.coverage" NAME="analysis_experiments_different_datasets Coverage Results" MODIFIED="1734100488585" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/fashion_mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$mnist.coverage" NAME="mnist Coverage Results" MODIFIED="1733735152155" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$train.coverage" NAME="train Coverage Results" MODIFIED="1738878713346" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/fashion_mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments.coverage" NAME="analysis_experiments Coverage Results" MODIFIED="1733737767496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_plot_membrane_two_neurons.coverage" NAME="analysis_plot_membrane_two_neurons Coverage Results" MODIFIED="1736955351392" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$train_og.coverage" NAME="train_og Coverage Results" MODIFIED="1729117424748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/shd" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$experiments.coverage" NAME="experiments Coverage Results" MODIFIED="1732877569192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_datasets.coverage" NAME="analysis_datasets Coverage Results" MODIFIED="1734080822813" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Work\RP\bats-time-discretization\experiments\mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_plot_membrane.coverage" NAME="analysis_plot_membrane Coverage Results" MODIFIED="1736946648892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
   </component>
 </project>

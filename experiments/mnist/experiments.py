@@ -207,6 +207,7 @@ def train(network, DT, np_seed, cp_seed):
 
                 # Test evaluation
                 if training_steps % TEST_PERIOD_STEP == 0:
+                    print(epoch_metrics)
                     acc = test(network, dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
                     if acc > best_acc:
                         best_acc = acc
@@ -266,7 +267,7 @@ def create_network():
     network = Network()
     input_layer = InputLayer(n_neurons=N_INPUTS, name="Input layer")
     network.add_layer(input_layer, input=True)
-    hidden_layer = LIFLayer(previous_layer=input_layer, n_neurons=400, tau_s=TAU_S_1,
+    hidden_layer = LIFLayer(previous_layer=input_layer, n_neurons=800, tau_s=TAU_S_1,
                             theta=THRESHOLD_HAT_1,
                             delta_theta=DELTA_THRESHOLD_1,
                             time_delta=DT,
@@ -274,23 +275,7 @@ def create_network():
                             max_n_spike=SPIKE_BUFFER_SIZE_1,
                             name="Hidden layer 1")
     network.add_layer(hidden_layer)
-    hidden_layer2 = LIFLayer(previous_layer=hidden_layer, n_neurons=400, tau_s=TAU_S_1,
-                            theta=THRESHOLD_HAT_1,
-                            delta_theta=DELTA_THRESHOLD_1,
-                            time_delta=DT,
-                            weight_initializer=weight_initializer,
-                            max_n_spike=SPIKE_BUFFER_SIZE_1,
-                            name="Hidden layer 2")
-    network.add_layer(hidden_layer2)
-    hidden_layer3 = LIFLayer(previous_layer=hidden_layer2, n_neurons=400, tau_s=TAU_S_1,
-                            theta=THRESHOLD_HAT_1,
-                            delta_theta=DELTA_THRESHOLD_1,
-                            time_delta=DT,
-                            weight_initializer=weight_initializer,
-                            max_n_spike=SPIKE_BUFFER_SIZE_1,
-                            name="Hidden layer 3")
-    network.add_layer(hidden_layer3)
-    output_layer = LIFLayer(previous_layer=hidden_layer3, n_neurons=N_OUTPUTS, tau_s=TAU_S_OUTPUT,
+    output_layer = LIFLayer(previous_layer=hidden_layer, n_neurons=N_OUTPUTS, tau_s=TAU_S_OUTPUT,
                             theta=THRESHOLD_HAT_OUTPUT,
                             delta_theta=DELTA_THRESHOLD_OUTPUT,
                             time_delta=DT,
