@@ -6,17 +6,39 @@
   <component name="ChangeListManager">
     <list default="true" id="5d4fef14-4bef-4625-a325-a4a52abef900" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 1_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 1_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 2_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 2_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Output layer_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Output layer_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 1_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 1_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 2_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 2_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Output layer_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Output layer_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 1_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 1_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 2_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 2_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Output layer_weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Output layer_weights.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0005/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0005/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.0005/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.001/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.001/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.001/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.003/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.004/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.004/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.004/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.005/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.005/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.005/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.006/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.006/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.006/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.007/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.008/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.008/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.008/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.009/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.009/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.009/Output layer_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.01/Hidden layer 1_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.01/Hidden layer 2_weights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/best_model/DT = 0.01/Output layer_weights.npy" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,34 +63,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Dataset.executor&quot;: &quot;Run&quot;,
-    &quot;Python.analysis_datasets.executor&quot;: &quot;Run&quot;,
-    &quot;Python.analysis_experiments.executor&quot;: &quot;Run&quot;,
-    &quot;Python.analysis_experiments_1_layer.executor&quot;: &quot;Run&quot;,
-    &quot;Python.analysis_experiments_different_datasets.executor&quot;: &quot;Run&quot;,
-    &quot;Python.analysis_experiments_more_layers.executor&quot;: &quot;Run&quot;,
-    &quot;Python.experiments.executor&quot;: &quot;Run&quot;,
-    &quot;Python.mnist.executor&quot;: &quot;Run&quot;,
-    &quot;Python.shd.executor&quot;: &quot;Run&quot;,
-    &quot;Python.smnist.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_dataset.executor&quot;: &quot;Run&quot;,
-    &quot;Python.train.executor&quot;: &quot;Run&quot;,
-    &quot;Python.train_og.executor&quot;: &quot;Run&quot;,
-    &quot;Python.train_spike_count.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;analysis__experiments&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/Work/RP/bats-time-discretization&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Dataset.executor": "Run",
+    "Python.analysis_datasets.executor": "Run",
+    "Python.analysis_experiments.executor": "Run",
+    "Python.analysis_experiments_1_layer.executor": "Run",
+    "Python.analysis_experiments_different_datasets.executor": "Run",
+    "Python.analysis_experiments_more_layers.executor": "Run",
+    "Python.experiments.executor": "Run",
+    "Python.mnist.executor": "Run",
+    "Python.shd.executor": "Run",
+    "Python.smnist.executor": "Run",
+    "Python.test_dataset.executor": "Run",
+    "Python.train.executor": "Run",
+    "Python.train_og.executor": "Run",
+    "Python.train_spike_count.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "analysis__experiments",
+    "last_opened_file_path": "D:/Work/bats-time-discretization",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Work\RP\bats-time-discretization\experiments\emnist" />
@@ -179,10 +202,10 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.analysis_experiments_different_datasets" />
       <item itemvalue="Python.mnist" />
       <item itemvalue="Python.shd" />
       <item itemvalue="Python.smnist" />
+      <item itemvalue="Python.analysis_experiments_different_datasets" />
     </list>
     <recent_temporary>
       <list>
@@ -274,6 +297,7 @@
       <workItem from="1738878539276" duration="7099000" />
       <workItem from="1739556041250" duration="8000" />
       <workItem from="1739557025554" duration="18000" />
+      <workItem from="1740656508675" duration="907000" />
     </task>
     <servers />
   </component>
