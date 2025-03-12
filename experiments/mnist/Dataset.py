@@ -42,6 +42,9 @@ class Dataset:
     def __init__(self, path: Path):
         loaded_data = np.load(path, allow_pickle=True)
         self.__train_X = loaded_data['x_train']
+
+        print(f"Min: {np.min(self.__train_X)}, Max: {np.max(self.__train_X)}")
+
         self.__train_labels = loaded_data['y_train']
         self.__test_X = loaded_data['x_test']
         self.__test_labels = loaded_data['y_test']

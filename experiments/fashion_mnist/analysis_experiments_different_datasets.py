@@ -59,7 +59,7 @@ TARGET_FALSE = 3
 TARGET_TRUE = 15
 
 DT = 0.001
-DT_LIST = [0.001, 0.008]
+DT_LIST = [0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008]
 
 def show_spike_differences(input_spike_times_continuous, input_spike_times_discrete, hidden_spike_times_continuous, hidden_spike_times_discrete, output_spikes_times, discrete_output_spike_times, label, DT, timestep, PLOT_DIR):
     fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(10, 15))
@@ -301,8 +301,9 @@ for layer in network.layers:
 layer_losses = {layer.name: [[] for _ in range(len(network_configs))] for layer in network.layers}
 
 for i, config in enumerate(network_configs):
-        mse['Layers'][i] = len(config)
-        mse['Dataset'][i] = dataset_name
+        mse.loc[i, 'Layers'] = len(config)
+        mse['Dataset'] = mse['Dataset'].astype(object)  # Ensure column can store strings
+        mse.loc[i, 'Dataset'] = dataset_name  # Assign the dataset name
         print("Creating network for network with " + str(len(config)) + " layers")
 
         for experiment in range(NR_EXPERIMENTS):
@@ -324,22 +325,23 @@ for i, config in enumerate(network_configs):
 
             for layer in network.layers:
                 loss = mse_loss(layer.spike_trains[0].get()[0], layer.spike_trains[2].get()[0])
-                mse[layer.name][i] += loss  # Accumulate the loss directly in the DataFrame
-                layer_losses[layer.name][i].append(loss)  # Store the loss for variance calculation
-                mse['Spike Count'][i] += len(
+                mse.loc[i, layer.name] += loss  # Accumulate the loss directly in the DataFrame
+                layer_losses[layer.name][i].append(loss)
+                mse.loc[i, 'Spike Count'] += len(
                     layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
                 )
-                mse['Spike Count ' + layer.name][i] += len(
+                mse.loc[i, 'Spike Count ' + layer.name] += len(
                     layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
                 )
 
         # Average the results after all experiments
-        mse['Spike Count'][i] /= NR_EXPERIMENTS
+        mse.loc[i, 'Spike Count'] /= NR_EXPERIMENTS
+
         for layer in network.layers:
-            mse[layer.name][i] /= NR_EXPERIMENTS  # Average the loss for each layer
+            mse.loc[i, layer.name] /= NR_EXPERIMENTS  # Average the loss for each layer
 
             # Compute standard deviation
-            mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
+            mse.loc[i, layer.name + ' StdDev'] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
 
 mse.to_csv("mnist_experiments", index=False)
 
