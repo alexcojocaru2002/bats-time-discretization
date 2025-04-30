@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import sys
 
+from numpy.random import random
+
 sys.path.insert(0, "../../")  # Add repository root to python path
 
 from Dataset import Dataset
@@ -22,7 +24,7 @@ DATASET_PATH = Path("../../datasets/mnist.npz")
 
 N_INPUTS = 28 * 28
 SIMULATION_TIME = 0.2
-LATENCY_TIMES_LIST = [0.02, 0.03, 0.05, 0.08, 0.1, 0.13, 0.15, 0.18, 0.2]
+# LATENCY_TIMES_LIST = [0.0002, 0.0004]
 # At this time step the network seems to self destruct
 
 #DT = 0.01
@@ -44,7 +46,7 @@ DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
 SPIKE_BUFFER_SIZE_OUTPUT = 30
 
 # Training parameters
-N_TRAINING_EPOCHS = 20
+N_TRAINING_EPOCHS = 10
 N_TRAIN_SAMPLES = 60000
 N_TEST_SAMPLES = 10000
 TRAIN_BATCH_SIZE = 50
@@ -123,30 +125,30 @@ def discrete(spikes: cp.ndarray, DT: float):
     discrete_spikes[finite_mask] = discrete_spikes_finite
     return discrete_spikes
 
-def calculate_latency_prob(discrete_out_spikes: cp.ndarray, labels):
-    # This is for latency
-    batch_size, num_neurons, time_steps = discrete_out_spikes.shape
-    # Convert LATENCY_TIMES_LIST to a CuPy array for efficient broadcasting
-    latency_times_array = cp.array(LATENCY_TIMES_LIST)
-    # Create a dictionary to store the results
-    probabilities_list = {latency: [] for latency in LATENCY_TIMES_LIST}
-    # Get the labels as a CuPy array
-    # Extract spikes for the target neurons based on labels
-    target_spikes = cp.array([discrete_out_spikes[i, labels[i], :] for i in range(batch_size)])
-    # Loop over each latency time
-    for latency in latency_times_array:
-        # Create a mask for spikes that occur before the given latency time
-        latency_mask = target_spikes <= latency
-        # print(latency_mask)
-        # Count the spikes for each batch and latency time
-        count_spikes = cp.sum(latency_mask, axis=1)
-        # print(count_spikes)
-        # Calculate probabilities and store in the list
-        probabilities_list[latency.item()] = (count_spikes / TARGET_TRUE).tolist()
-    return probabilities_list
+# def calculate_latency_prob(discrete_out_spikes: cp.ndarray, labels):
+#     # This is for latency
+#     batch_size, num_neurons, time_steps = discrete_out_spikes.shape
+#     # Convert LATENCY_TIMES_LIST to a CuPy array for efficient broadcasting
+#     # latency_times_array = cp.array(LATENCY_TIMES_LIST)
+#     # Create a dictionary to store the results
+#     # probabilities_list = {latency: [] for latency in LATENCY_TIMES_LIST}
+#     # Get the labels as a CuPy array
+#     # Extract spikes for the target neurons based on labels
+#     target_spikes = cp.array([discrete_out_spikes[i, labels[i], :] for i in range(batch_size)])
+#     # Loop over each latency time
+#     for latency in latency_times_array:
+#         # Create a mask for spikes that occur before the given latency time
+#         latency_mask = target_spikes <= latency
+#         # print(latency_mask)
+#         # Count the spikes for each batch and latency time
+#         count_spikes = cp.sum(latency_mask, axis=1)
+#         # print(count_spikes)
+#         # Calculate probabilities and store in the list
+#         probabilities_list[latency.item()] = (count_spikes / TARGET_TRUE).tolist()
+#     return probabilities_list
 
-def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
-    plot_count = 0
+def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
+    # plot_count = 0
     print("This network will be trained using DT = " + str(DT))
     np.random.seed(np_seed)
     cp.random.seed(cp_seed)
@@ -158,10 +160,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
     if not PLOT_DIR.exists():
         PLOT_DIR.mkdir()
 
-    # Dataset
-    print("Loading datasets...")
-    dataset = Dataset(path=DATASET_PATH)
-    dataset_test_hypothesis = Dataset(path=DATASET_PATH)
+    # dataset_test_hypothesis = Dataset(path=DATASET_PATH)
 
     print("Creating network...")
     network = Network()
@@ -307,7 +306,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
             # Test evaluation
             if training_steps % TEST_PERIOD_STEP == 0:
                 test_time_monitor.start()
-                cumulative_probabilities = {latency: [] for latency in LATENCY_TIMES_LIST}
+                # cumulative_probabilities = {latency: [] for latency in LATENCY_TIMES_LIST}
                 for batch_idx in range(N_TEST_BATCH):
                     spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
                     if DT != 0.0:
@@ -319,13 +318,13 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                     out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
 
                     # This is for latency
-                    probabilities_list = calculate_latency_prob(discrete_out_spikes, labels)
+                    # probabilities_list = calculate_latency_prob(discrete_out_spikes, labels)
                     # Calculate the average probabilities for each latency time using CuPy
-                    average_probabilities = {latency: np.mean(probabilities) for latency, probabilities in
-                                             probabilities_list.items()}
+                    # average_probabilities = {latency: np.mean(probabilities) for latency, probabilities in
+                                             # probabilities_list.items()}
                     # Display the results
-                    for latency, avg_prob in average_probabilities.items():
-                        cumulative_probabilities[latency].append(avg_prob)
+                    # for latency, avg_prob in average_probabilities.items():
+                    #     cumulative_probabilities[latency].append(avg_prob)
 
                     pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
                     loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
@@ -343,22 +342,22 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
 
                 #Here we want to test how the network performs on the same dataset throughout training
                 #Testing hypothesis if spikes get pushed earlier and discretization does not affect so much later epochs
-                spikes, n_spikes, labels = dataset_test_hypothesis.get_test_batch(0, TEST_BATCH_SIZE) # Using input 0
+                # spikes, n_spikes, labels = dataset_test_hypothesis.get_test_batch(0, TEST_BATCH_SIZE) # Using input 0
                 if DT != 0.0:
                     discrete_spikes = discrete(spikes, DT)
                 else:
                     discrete_spikes = spikes
                 network.reset()
                 network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
-                out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-                scatter_plot_spike_times(input_layer.spike_trains[2].get()[0], hidden_layer.spike_trains[2].get()[0], out_spikes.get()[0], discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
-                plot_count = plot_count + 1
+                # out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
+                # scatter_plot_spike_times(input_layer.spike_trains[2].get()[0], hidden_layer.spike_trains[2].get()[0], out_spikes.get()[0], discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
+                # plot_count = plot_count + 1
 
                 for l, mon in test_norm_monitors.items():
                     mon.add(l.weights)
 
-                overall_average_probabilities.append({latency: np.mean(probabilities) for latency, probabilities in
-                                                 cumulative_probabilities.items()})
+                # overall_average_probabilities.append({latency: np.mean(probabilities) for latency, probabilities in
+                #                                  cumulative_probabilities.items()})
                 #print(overall_average_probabilities)
 
                 test_learning_rate_monitor.add(optimizer.learning_rate)
@@ -374,7 +373,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                     print(f"Best accuracy: {np.around(best_acc, 2)}%, Networks save to: {SAVE_DIR}")
     test_monitors_manager.export()
     train_monitors_manager.export()
-    return test_monitors_manager, train_monitors_manager, output_spike_count_target, overall_average_probabilities
+    return (test_monitors_manager, train_monitors_manager, output_spike_count_target, best_acc) # , overall_average_probabilities)
 
 
 def calculate_average_across_experiments(results):
@@ -417,8 +416,12 @@ if __name__ == "__main__":
     monitors_dict = {}
     all_results = []
     all_results_test = []
-    DT_list = [0.001]
+    # DT_list = [0.0003937, 0.00022272]
+    DT_list = [0.005]
     np.set_printoptions(threshold=sys.maxsize)
+    # Dataset
+    print("Loading datasets...")
+    dataset = Dataset(path=DATASET_PATH)
 
     for i in range(0, NR_EXPERIMENTS):
         print("STARTING RUN NUMBER " + str(i))
@@ -431,10 +434,12 @@ if __name__ == "__main__":
             DT = val
             PLOT_DIR = Path('./scatter_plots/' + 'DT = ' + str(val))
 
-            test_monitor, train_monitor, output_spike_target, all_discrete_spikes = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR)
+            test_monitor, train_monitor, output_spike_target, best_acc = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset)
             df = train_monitor.return_vals()
             df2 = test_monitor.return_vals()
-            df3 = pd.DataFrame(all_discrete_spikes)
+            # df3 = pd.DataFrame(all_discrete_spikes)
             df.to_csv(EXPORT_DIR / ("Train DT = " + str(val)), index=False)
             df2.to_csv(EXPORT_DIR / ("Test DT = " + str(val)), index=False)
-            df3.to_csv(EXPORT_DIR / ("Prediction confidence for DT = " + str(val)), index=False)
+            # df3.to_csv(EXPORT_DIR / ("Prediction confidence for DT = " + str(val)), index=False)
+
+

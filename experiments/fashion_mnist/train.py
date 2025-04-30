@@ -19,7 +19,7 @@ DATASET_PATH = Path("../../datasets/")
 
 N_INPUTS = 28 * 28
 SIMULATION_TIME = 0.2
-LATENCY_TIMES_LIST = [0.02, 0.03, 0.05, 0.08, 0.1, 0.13, 0.15, 0.18, 0.2]
+# LATENCY_TIMES_LIST = [0.02, 0.03, 0.05, 0.08, 0.1, 0.13, 0.15, 0.18, 0.2]
 
 # Hidden layer
 N_NEURONS_1 = 400
@@ -43,7 +43,7 @@ DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
 SPIKE_BUFFER_SIZE_OUTPUT = 20
 
 # Training parameters
-N_TRAINING_EPOCHS = 100
+N_TRAINING_EPOCHS = 10
 N_TRAIN_SAMPLES = 60000
 N_TEST_SAMPLES = 10000
 TRAIN_BATCH_SIZE = 5
@@ -90,23 +90,23 @@ def calculate_latency_prob(discrete_out_spikes: cp.ndarray, labels):
     # This is for latency
     batch_size, num_neurons, time_steps = discrete_out_spikes.shape
     # Convert LATENCY_TIMES_LIST to a CuPy array for efficient broadcasting
-    latency_times_array = cp.array(LATENCY_TIMES_LIST)
-    # Create a dictionary to store the results
-    probabilities_list = {latency: [] for latency in LATENCY_TIMES_LIST}
+    # latency_times_array = cp.array(LATENCY_TIMES_LIST)
+    # # Create a dictionary to store the results
+    # probabilities_list = {latency: [] for latency in LATENCY_TIMES_LIST}
     # Get the labels as a CuPy array
     # Extract spikes for the target neurons based on labels
     target_spikes = cp.array([discrete_out_spikes[i, labels[i], :] for i in range(batch_size)])
     # Loop over each latency time
-    for latency in latency_times_array:
-        # Create a mask for spikes that occur before the given latency time
-        latency_mask = target_spikes <= latency
-        # print(latency_mask)
-        # Count the spikes for each batch and latency time
-        count_spikes = cp.sum(latency_mask, axis=1)
-        # print(count_spikes)
-        # Calculate probabilities and store in the list
-        probabilities_list[latency.item()] = (count_spikes / TARGET_TRUE).tolist()
-    return probabilities_list
+    # for latency in latency_times_array:
+    #     # Create a mask for spikes that occur before the given latency time
+    #     latency_mask = target_spikes <= latency
+    #     # print(latency_mask)
+    #     # Count the spikes for each batch and latency time
+    #     count_spikes = cp.sum(latency_mask, axis=1)
+    #     # print(count_spikes)
+    #     # Calculate probabilities and store in the list
+    #     probabilities_list[latency.item()] = (count_spikes / TARGET_TRUE).tolist()
+    # return probabilities_list
 
 
 
@@ -320,7 +320,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
             # Test evaluation
             if training_steps % TEST_PERIOD_STEP == 0:
                 test_time_monitor.start()
-                cumulative_probabilities = {latency: [] for latency in LATENCY_TIMES_LIST}
+                # cumulative_probabilities = {latency: [] for latency in LATENCY_TIMES_LIST}
                 for batch_idx in range(N_TEST_BATCH):
                     spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
                     if DT != 0.0:
@@ -394,39 +394,8 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
     train_monitors_manager.export()
     return test_monitors_manager, train_monitors_manager
 
-def calculate_average_across_experiments(results):
-    average_results = {}
-
-    for dt_index, dt_value in enumerate(DT_list):
-        dt_frames = [experiment[dt_index] for experiment in results]
-
-        # Concatenate DataFrames along the rows
-        concatenated_df = pd.concat(dt_frames, axis=0)
-
-        # Calculate the mean for each group of epochs
-        average_df = concatenated_df.groupby('Epochs').mean().reset_index()
-
-        average_results[dt_value] = average_df
-
-    return average_results
 
 
-def plot_metrics_across_dt(average_results):
-    # Get the metrics from the DataFrame columns, excluding 'Epochs'
-    example_df = next(iter(average_results.values()))
-    metrics = [col for col in example_df.columns if col != 'Epochs']
-
-    for metric in metrics:
-        plt.figure(figsize=(10, 6))
-        for dt_value, avg_df in average_results.items():
-            plt.plot(avg_df['Epochs'], avg_df[metric], label=f'DT = {dt_value}')
-
-        plt.grid(True)
-        plt.xlabel('Epochs')
-        plt.ylabel(metric)
-        plt.title(f'{metric} Across Epochs for Different DT values')
-        plt.legend()
-        plt.show()
 
 NR_EXPERIMENTS = 1
 
@@ -436,7 +405,7 @@ if __name__ == "__main__":
     all_results_test = []
     #np_seeds = [1399766615]
     #cp_seeds = [40394794]
-    DT_list = [0.003, 0.007, 0.00]
+    DT_list = [0.0000816, 0.0000803]
     for i in range(0, NR_EXPERIMENTS):
         print("STARTING RUN NUMBER " + str(i))
         print("\n")
@@ -465,7 +434,3 @@ if __name__ == "__main__":
             # df3.to_csv(EXPORT_DIR / ("Prediction Confidence DT = " + str(val)), index=False)
         #all_results.append(train_model_results)
         #all_results_test.append(test_model_results)
-    #average_results = calculate_average_across_experiments(all_results)
-    #average_results_test = calculate_average_across_experiments(all_results_test)
-    #plot_metrics_across_dt(average_results)
-    #plot_metrics_across_dt(average_results_test)+

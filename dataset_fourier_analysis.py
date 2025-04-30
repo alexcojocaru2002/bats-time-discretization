@@ -61,4 +61,5 @@ for batch_idx, (data, target) in enumerate(train_loader):
 sum_fft=sum_fft/n_samples
 
 plt.plot(torch.abs(sum_fft[500:]))
+plt.show()
 

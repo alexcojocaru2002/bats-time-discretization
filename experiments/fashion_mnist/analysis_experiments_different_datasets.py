@@ -58,8 +58,8 @@ MIN_LEARNING_RATE = 0
 TARGET_FALSE = 3
 TARGET_TRUE = 15
 
-DT = 0.001
-DT_LIST = [0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008]
+DT = 0.0003922
+DT_LIST = [0.0000816, 0.0000803]
 
 def show_spike_differences(input_spike_times_continuous, input_spike_times_discrete, hidden_spike_times_continuous, hidden_spike_times_discrete, output_spikes_times, discrete_output_spike_times, label, DT, timestep, PLOT_DIR):
     fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(10, 15))
@@ -275,7 +275,7 @@ print("Loading datasets...")
 loss_fct = SpikeCountClassLoss(target_false=TARGET_FALSE, target_true=TARGET_TRUE)
 optimizer = AdamOptimizer(learning_rate=LEARNING_RATE)
 
-network_configs=[[800, 800], [800, 800, 800, 800, 800, 800, 800]] # Problem, make sure the biggest network is last!
+network_configs=[[800, 800, 800, 800, 800, 800, 800]] # Problem, make sure the biggest network is last!
 dataset = Dataset_Mnist(path=DATASET_PATH_FMNIST)
 # dataset_emnist = Dataset_Emnist(path=DATASET_PATH_EMNIST)
 # dataset_fmnist = Dataset_Fmnist(path=DATASET_PATH_FMNIST)
@@ -355,7 +355,7 @@ def plot_mse_stdev(mse_df):
         stddev_values = {}
 
         for column in mse_df.columns:
-            if "StdDev" in column and "Output layer" not in column:  # Ignore Output Layer
+            if "StdDev" in column and "Output layer" not in column and "Input layer" not in column:  # Ignore Output Layer
                 layer_name = column.replace(" StdDev", "")
                 if layer_name in mse_df.columns:
                     mse_values[layer_name] = row[layer_name]
@@ -377,7 +377,7 @@ def plot_mse_stdev(mse_df):
         # Customize the plot
         plt.xlabel("Layer", fontsize=12)
         plt.ylabel("MSE", fontsize=12)
-        plt.title(f"Layer Configuration {layer_configuration}: MSE and StdDev (For Fashion MNIST)", fontsize=14)
+        plt.title(f"Layer Configuration {layer_configuration}: MSE and StdDev (For Fashion MNIST) for DT = {DT}", fontsize=14)
         plt.xticks(rotation=45, ha="right")
         plt.grid(axis="y", linestyle="--", alpha=0.6)
         plt.tight_layout()

@@ -82,7 +82,6 @@ extern "C" {
             // Spike time is before the last pre-spike or after the next spike --> stop
             if (tmp <= discrete_last_spike || tmp > max_simulation || tmp > next_spike)
                 return false;
-
             // Discretize to next time step
             if (time_delta != 0.0f)
             	//tmp = tmp + (time_delta - fmodf(tmp, time_delta)); // t_k
