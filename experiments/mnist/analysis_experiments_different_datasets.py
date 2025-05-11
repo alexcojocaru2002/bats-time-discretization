@@ -45,7 +45,7 @@ N_TRAINING_EPOCHS = 10
 N_TRAIN_SAMPLES = 60000
 N_TEST_SAMPLES = 10000
 TRAIN_BATCH_SIZE = 1
-TEST_BATCH_SIZE = 10
+TEST_BATCH_SIZE = 100
 N_TRAIN_BATCH = int(N_TRAIN_SAMPLES / TRAIN_BATCH_SIZE)
 N_TEST_BATCH = int(N_TEST_SAMPLES / TEST_BATCH_SIZE)
 TRAIN_PRINT_PERIOD = 0.1
@@ -60,7 +60,12 @@ TARGET_FALSE = 3
 TARGET_TRUE = 15
 
 DT = 0.0003922
-DT_LIST = [0.00]
+# DT_LIST = [0.000004, 0.0000043, 0.0000045, 0.000005, 0.0000053, 0.0000055, 0.000006, 0.000008, 0.0000095, 0.0000099, 0.00001, 0.0000115, 0.000012, 0.0000123, 0.0000125, 0.000013]
+DT_LIST = [0.002, 0.003, 0.004, 0.0043, 0.0045, 0.005, 0.0053, 0.0055, 0.006, 0.008, 0.0095, 0.0099]
+
+# DT_LIST = [3.92156862745097e-4, 3.921569e-4, 3.921578e-4, 3.921668e-3]
+
+# DT_LIST = [0.003]
 
 # Plot parameters
 EXPORT_METRICS = True
@@ -211,15 +216,15 @@ def run_experiment(dt):
 
     mse = pd.DataFrame()
     mse['Layers'] = np.zeros((len(network_configs), ))
-    mse['Spike Count'] = np.empty((len(network_configs), ))
+    # mse['Spike Count'] = np.empty((len(network_configs), ))
 
     # Add columns to track both average and standard deviation
     for layer in network.layers:
         mse[layer.name] = np.zeros((len(network_configs), ))  # For average MSE loss
         mse[layer.name + ' StdDev'] = np.zeros((len(network_configs), ))  # For standard deviation
-
-    for layer in network.layers:
-        mse['Spike Count ' + layer.name] = np.zeros((len(network_configs), ))
+    #
+    # for layer in network.layers:
+    #     mse['Spike Count ' + layer.name] = np.zeros((len(network_configs), ))
 
     # Temporary storage for per-experiment losses to calculate standard deviation
     layer_losses = {layer.name: [[] for _ in range(len(network_configs))] for layer in network.layers}
@@ -255,7 +260,7 @@ def run_experiment(dt):
                 # )
 
             # Average the results after all experiments
-            mse['Spike Count'][i] /= NR_EXPERIMENTS
+            # mse['Spike Count'][i] /= NR_EXPERIMENTS
             for layer in network.layers:
                 mse[layer.name][i] /= NR_EXPERIMENTS  # Average the loss for each layer
 
@@ -265,5 +270,41 @@ def run_experiment(dt):
     mse.to_csv("mnist_experiments", index=False)
     utils.plot_mse_stdev(mse, DT)
 
-for dt in DT_LIST:
-    run_experiment(dt)
+
+def run_input_layer():
+    network_config = [800, 800]
+    # network = create_network(network_config) # Because of the DF initialization
+
+    mse = pd.DataFrame()
+    mse['DTs'] = np.zeros((len(network_configs), ))
+    global DT
+    for DT in DT_LIST:
+        mse["DT="+str(DT)] = 0  # For average MSE loss
+
+
+    for i, deltat in enumerate(DT_LIST):
+            DT = deltat
+            network = create_network(network_config)
+            (train_monitors_manager, train_accuracy_monitor, train_loss_monitor,
+             train_time_monitor, train_silent_label_monitor, test_monitors_manager,
+             test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_time_monitor,
+             test_norm_monitors, test_learning_rate_monitor, test_spike_counts_monitors) = add_monitors(
+                network)
+            test(network, dataset, loss_fct, 1.0, optimizer, test_time_monitor, test_accuracy_monitor,
+                 test_loss_monitor, test_silent_monitors, test_monitors_manager,
+                 test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
+
+            discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get() + 3.8e-3, DT)
+            loss = utils.mse_loss(network.layers[0].spike_trains[0].get() + 3.8e-3,  discrete_spikes_simple)
+            mse["DT="+str(deltat)] = loss  # Accumulate the loss directly in the DataFrame
+            print("The loss is " + str(loss))
+                # Compute standard deviation
+                # mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
+
+    mse.to_csv("mnist_experiments_dt", index=False)
+    utils.plot_single_row_dt("mnist_experiments_dt")
+#
+# for dt in DT_LIST:
+#     run_experiment(dt)
+
+run_input_layer()

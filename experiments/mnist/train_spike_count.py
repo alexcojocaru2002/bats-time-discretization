@@ -417,7 +417,7 @@ if __name__ == "__main__":
     all_results = []
     all_results_test = []
     # DT_list = [0.0003937, 0.00022272]
-    DT_list = [0.005]
+    DT_list = [3.921568e-4, 3.921569e-4]
     np.set_printoptions(threshold=sys.maxsize)
     # Dataset
     print("Loading datasets...")

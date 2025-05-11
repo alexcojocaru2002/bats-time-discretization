@@ -88,7 +88,7 @@ def mse_loss(spike_train, discrete_spike_train):
         for neuron_index in range(spike_train.shape[1]):
             i = 0
             while i < spike_train.shape[2] and spike_train[batch_idx][neuron_index][i] != np.inf:
-                mse = mse + (discrete_spike_train[batch_idx][neuron_index][i] - spike_train[batch_idx][neuron_index][i]) ** 2
+                mse = mse + np.sqrt(((discrete_spike_train[batch_idx][neuron_index][i] - spike_train[batch_idx][neuron_index][i]) ** 2))
                 i = i + 1
                 total_count += 1
     if total_count > 0:
@@ -143,3 +143,29 @@ def plot_mse_stdev(mse_df, DT):
         # Show the plot for the current layer configuration
         plt.show()
 
+
+
+def plot_single_row_dt(csv_path):
+    df = pd.read_csv(csv_path)
+
+    # Drop the 'DTs' column header and get the only row of data
+    row = df.iloc[0, 1:]  # skip first column (DTs)
+
+    # Extract DT values from column headers like "DT=0.001"
+    x = np.array([float(col.split('=')[1]) for col in row.index])
+    y = row.values.astype(float)
+
+    # Theoretical values: (dt / sqrt(3))
+    theoretical = (x / np.sqrt(3))
+
+    # Plot
+    plt.plot(x, y, marker='o', linestyle='-', label='Measured Input Layer MSE')
+    plt.plot(x, theoretical, marker='x', linestyle='--', label='Theoretical: (dt/√3)')
+
+    plt.xlabel('Delta Time (DT)')
+    plt.ylabel('Input Layer MSE')
+    plt.title('MSE vs Delta Time (DT)')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
