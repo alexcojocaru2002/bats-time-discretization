@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import re
 
 # Path to folder containing CSV files
-folder_path = "output_metrics/experiment_0_ 332571382_660420983"
+folder_path = "output_metrics/new_experiments/experiment_0_ 332571382_660420983"
 
 # Data structure: {dt_value: [DataFrames]}
 dt_to_dfs = {}

@@ -47,7 +47,7 @@ DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
 SPIKE_BUFFER_SIZE_OUTPUT = 30
 
 # Training parameters
-N_TRAINING_EPOCHS = 20
+N_TRAINING_EPOCHS = 30
 N_TRAIN_SAMPLES = 60000
 N_TEST_SAMPLES = 10000
 TRAIN_BATCH_SIZE = 50
@@ -199,6 +199,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
     test_monitors_manager = MonitorsManager(all_test_monitors,
                                             print_prefix="Test | ")
 
+    best_acc = 0
     print("Training...")
 
     if (SAVE_DIR / ("DT = " + str(DT))).exists():
@@ -269,8 +270,6 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
             # Training metrics
             if training_steps % TRAIN_PRINT_PERIOD_STEP == 0:
                 # Compute metrics
-
-
                 train_monitors_manager.record(epoch_metrics)
                 train_monitors_manager.print(epoch_metrics)
 
