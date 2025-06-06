@@ -9,6 +9,7 @@ import pandas as pd
 import sys
 
 from numpy.random import random
+from tqdm import tqdm
 
 sys.path.insert(0, "../../")  # Add repository root to python path
 
@@ -125,27 +126,6 @@ def discrete(spikes: cp.ndarray, DT: float):
     discrete_spikes[finite_mask] = discrete_spikes_finite
     return discrete_spikes
 
-# def calculate_latency_prob(discrete_out_spikes: cp.ndarray, labels):
-#     # This is for latency
-#     batch_size, num_neurons, time_steps = discrete_out_spikes.shape
-#     # Convert LATENCY_TIMES_LIST to a CuPy array for efficient broadcasting
-#     # latency_times_array = cp.array(LATENCY_TIMES_LIST)
-#     # Create a dictionary to store the results
-#     # probabilities_list = {latency: [] for latency in LATENCY_TIMES_LIST}
-#     # Get the labels as a CuPy array
-#     # Extract spikes for the target neurons based on labels
-#     target_spikes = cp.array([discrete_out_spikes[i, labels[i], :] for i in range(batch_size)])
-#     # Loop over each latency time
-#     for latency in latency_times_array:
-#         # Create a mask for spikes that occur before the given latency time
-#         latency_mask = target_spikes <= latency
-#         # print(latency_mask)
-#         # Count the spikes for each batch and latency time
-#         count_spikes = cp.sum(latency_mask, axis=1)
-#         # print(count_spikes)
-#         # Calculate probabilities and store in the list
-#         probabilities_list[latency.item()] = (count_spikes / TARGET_TRUE).tolist()
-#     return probabilities_list
 
 def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
     # plot_count = 0
@@ -219,23 +199,18 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
     test_monitors_manager = MonitorsManager(all_test_monitors,
                                             print_prefix="Test | ")
 
-    best_acc = 0.0
     print("Training...")
-
-    output_spike_count_target = []
-    # overall_average_probabilities = []
 
     if (SAVE_DIR / ("DT = " + str(DT))).exists():
         network.restore(SAVE_DIR / ("DT = " + str(DT)))
 
-    for epoch in range(N_TRAINING_EPOCHS):
+    for epoch in tqdm(range(N_TRAINING_EPOCHS), desc="Training epochs"):
         train_time_monitor.start()
         dataset.shuffle()
 
         # Learning rate decay
         if epoch > 0 and epoch % LR_DECAY_EPOCH == 0:
             optimizer.learning_rate = np.maximum(LR_DECAY_FACTOR * optimizer.learning_rate, MIN_LEARNING_RATE)
-        avg_gradient_agg = []
 
         for batch_idx in range(N_TRAIN_BATCH):
             # Get next batch
@@ -244,14 +219,13 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
                 discrete_spikes = discrete(spikes, DT)
             else:
                 discrete_spikes = spikes
-            # print("Batch number : " + str(batch_idx) + "\n")
+
             # Inference
             network.reset()
             network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME, training=True)
             out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
 
             # Predictions, loss and errors
-            #print(discrete_out_spikes[discrete_out_spikes != np.inf])
 
             pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
             loss, errors = loss_fct.compute_loss_and_errors(discrete_out_spikes, n_out_spikes, labels)
@@ -276,6 +250,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
             # if batch_idx % 10 == 0:
             #     plt.hist(avg_gradient[1].get().flatten())
             #     plt.show()
+
             # Apply step
             deltas = optimizer.step(avg_gradient)
             del avg_gradient
@@ -295,18 +270,13 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
             if training_steps % TRAIN_PRINT_PERIOD_STEP == 0:
                 # Compute metrics
 
-                # We average the probabilities per epoch to get a rough estimate of the confidence
-                #train_prediction_confidence_monitor.add(sum(epoch_spike_target) / len(epoch_spike_target))
-                #print(output_spike_count_target)
 
                 train_monitors_manager.record(epoch_metrics)
                 train_monitors_manager.print(epoch_metrics)
-                #train_monitors_manager.export()
 
             # Test evaluation
             if training_steps % TEST_PERIOD_STEP == 0:
                 test_time_monitor.start()
-                # cumulative_probabilities = {latency: [] for latency in LATENCY_TIMES_LIST}
                 for batch_idx in range(N_TEST_BATCH):
                     spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
                     if DT != 0.0:
@@ -316,15 +286,6 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
                     network.reset()
                     network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
                     out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-
-                    # This is for latency
-                    # probabilities_list = calculate_latency_prob(discrete_out_spikes, labels)
-                    # Calculate the average probabilities for each latency time using CuPy
-                    # average_probabilities = {latency: np.mean(probabilities) for latency, probabilities in
-                                             # probabilities_list.items()}
-                    # Display the results
-                    # for latency, avg_prob in average_probabilities.items():
-                    #     cumulative_probabilities[latency].append(avg_prob)
 
                     pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
                     loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
@@ -340,18 +301,6 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
                     for l, mon in test_silent_monitors.items():
                         mon.add(l.spike_trains[1])
 
-                #Here we want to test how the network performs on the same dataset throughout training
-                #Testing hypothesis if spikes get pushed earlier and discretization does not affect so much later epochs
-                # spikes, n_spikes, labels = dataset_test_hypothesis.get_test_batch(0, TEST_BATCH_SIZE) # Using input 0
-                # if DT != 0.0:
-                #     discrete_spikes = discrete(spikes, DT)
-                # else:
-                #     discrete_spikes = spikes
-                # network.reset()
-                # network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
-                # out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-                # scatter_plot_spike_times(input_layer.spike_trains[2].get()[0], hidden_layer.spike_trains[2].get()[0], out_spikes.get()[0], discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
-                # plot_count = plot_count + 1
 
                 for l, mon in test_norm_monitors.items():
                     mon.add(l.weights)
@@ -369,16 +318,14 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
                     print(f"Best accuracy: {np.around(best_acc, 2)}%, Networks save to: {SAVE_DIR}")
     test_monitors_manager.export()
     train_monitors_manager.export()
-    return test_monitors_manager, train_monitors_manager, output_spike_count_target, best_acc  # , overall_average_probabilities)
+    return test_monitors_manager, train_monitors_manager
 
-NR_EXPERIMENTS = 1
+NR_EXPERIMENTS = 3
 
 if __name__ == "__main__":
     monitors_dict = {}
-    all_results = []
-    all_results_test = []
-    # DT_list = [0.0003937, 0.00022272]
-    DT_list = [0.001]
+
+    DT_list = [0.0001, 0.0003921568, 0.000393701, 0.0004, 0.0005, 0.001, 0.002, 0.003, 0.004, 0.005]
     np.set_printoptions(threshold=sys.maxsize)
     # Dataset
     print("Loading datasets...")
@@ -395,11 +342,9 @@ if __name__ == "__main__":
             DT = val
             PLOT_DIR = Path('./scatter_plots/' + 'DT = ' + str(val))
 
-            test_monitor, train_monitor, output_spike_target, best_acc = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset)
+            test_monitor, train_monitor = train_spike_count(val, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset)
             df = train_monitor.return_vals()
             df2 = test_monitor.return_vals()
-            # df3 = pd.DataFrame(all_discrete_spikes)
             df.to_csv(EXPORT_DIR / ("Train DT = " + str(val)), index=False)
             df2.to_csv(EXPORT_DIR / ("Test DT = " + str(val)), index=False)
-            # df3.to_csv(EXPORT_DIR / ("Prediction confidence for DT = " + str(val)), index=False)
 

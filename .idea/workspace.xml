@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cb2df54-35e8-4880-a5db-e202115b8bfa" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/experiments/emnist/plot_results_train.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/emnist/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/fashion_mnist/plot_results_train.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/mnist/plot_results_train.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/shd/analysis_experiments_different_datasets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/shd/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bats/CudaKernels/CuFiles/Inference/compute_spike_times.cu" beforeDir="false" afterPath="$PROJECT_DIR$/bats/CudaKernels/CuFiles/Inference/compute_spike_times.cu" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/emnist/analysis_experiments_different_datasets.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/emnist/analysis_experiments_different_datasets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/emnist/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/emnist/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/analysis_experiments_different_datasets.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/analysis_experiments_different_datasets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/fashion_mnist/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/fashion_mnist/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/analysis_experiments_different_datasets.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/analysis_experiments_different_datasets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/mnist_experiments_dt" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/mnist_experiments_dt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/mnist/train_spike_count.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/train_spike_count.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/mnist/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/utils.py" afterDir="false" />
     </list>
@@ -58,7 +44,7 @@
     "Python.utils.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/Work/manifold-preserving-guided-diffusion",
+    "last_opened_file_path": "D:/Work/bats/bats-time-discretization",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -150,6 +136,7 @@
       <workItem from="1748507596408" duration="74000" />
       <workItem from="1748988558739" duration="20986000" />
       <workItem from="1749069201189" duration="6544000" />
+      <workItem from="1749249544092" duration="649000" />
     </task>
     <servers />
   </component>
