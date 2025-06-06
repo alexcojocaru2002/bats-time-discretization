@@ -43,7 +43,7 @@ DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
 SPIKE_BUFFER_SIZE_OUTPUT = 20
 
 # Training parameters
-N_TRAINING_EPOCHS = 10
+N_TRAINING_EPOCHS = 30
 N_TRAIN_SAMPLES = 60000
 N_TEST_SAMPLES = 10000
 TRAIN_BATCH_SIZE = 5
@@ -165,7 +165,6 @@ def plot_heatmap(weights, title="Weight Heatmap"):
     plt.show()
 
 def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
-    plot_count = 0
     print("This network will be trained using DT = " + str(DT))
     np.random.seed(np_seed)
     cp.random.seed(cp_seed)
@@ -254,7 +253,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
         # Learning rate decay
         if epoch > 0 and epoch % LR_DECAY_EPOCH == 0:
             optimizer.learning_rate = np.maximum(LR_DECAY_FACTOR * optimizer.learning_rate, MIN_LEARNING_RATE)
-        epoch_spike_target = []
+
         for batch_idx in range(N_TRAIN_BATCH):
             # Get next batch
             spikes, n_spikes, labels = dataset.get_train_batch(batch_idx, TRAIN_BATCH_SIZE)
@@ -405,7 +404,7 @@ if __name__ == "__main__":
     all_results_test = []
     #np_seeds = [1399766615]
     #cp_seeds = [40394794]
-    DT_list = [0.0000816, 0.0000803]
+    DT_list = [0.0, 0.0005, 0.001, 0.002, 0.003, 0.004, 0.005]
     for i in range(0, NR_EXPERIMENTS):
         print("STARTING RUN NUMBER " + str(i))
         print("\n")

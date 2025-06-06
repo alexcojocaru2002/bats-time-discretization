@@ -53,7 +53,7 @@ extern "C" {
                                    int neuron_idx,
                                    int max_n_post_spike,
                                    int sample_idx) {
-        float x_tmp, inside_log, tmp;
+        float x_tmp, inside_log, tmp, tmp_disc;
 
         // Compute until there is no spike anymore
         while (true) {
@@ -78,16 +78,22 @@ extern "C" {
             if (potential + 0.0001 < (c * tau)) {
             	return false;
             }
-            
-            // Spike time is before the last pre-spike or after the next spike --> stop
-            if (tmp <= discrete_last_spike || tmp > max_simulation || tmp > next_spike)
-                return false;
+
+            // Add timeshift
+//             tmp = tmp + ((3 * time_delta) / 4) ;
+            tmp_disc = tmp;
+
             // Discretize to next time step
             if (time_delta != 0.0f)
-            	//tmp = tmp + (time_delta - fmodf(tmp, time_delta)); // t_k
-                discrete_spike_times[*n_spikes] = tmp + (time_delta - fmodf(tmp, time_delta));
+                tmp_disc = tmp_disc + (time_delta - fmodf(tmp, time_delta));
             else
-                discrete_spike_times[*n_spikes] = tmp;
+                tmp_disc = tmp;
+
+            // Spike time is before the last pre-spike or after the next spike --> stop
+            if (tmp_disc <= discrete_last_spike || tmp_disc > max_simulation || tmp_disc > next_spike)
+                return false;
+
+            discrete_spike_times[*n_spikes] = tmp_disc;
             // Spike time is valid
             //printf("%f %f\n", tmp, discrete_spike_times[*n_spikes]);
             a[*n_spikes] = cumul_a;

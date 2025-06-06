@@ -7,6 +7,7 @@ import numpy
 import numpy as np
 import pandas as pd
 import sys
+import utils
 
 sys.path.insert(0, "../../")  # Add repository root to python path
 
@@ -16,7 +17,8 @@ from bats.Losses import *
 from bats.Network import Network
 from bats.Optimizers import *
 
-from Dataset import Dataset as Dataset_Mnist
+from Dataset import Dataset as Dataset_Fmnist
+
 # Dataset
 DATASET_PATH_FMNIST = Path("../../datasets/")
 DATASET_PATH_EMNIST = Path("../../datasets/emnist-balanced.mat")
@@ -42,9 +44,9 @@ SPIKE_BUFFER_SIZE_OUTPUT = 30
 # Training parameters
 N_TRAINING_EPOCHS = 10
 N_TRAIN_SAMPLES = 60000
-N_TEST_SAMPLES = 1
-TRAIN_BATCH_SIZE = 50
-TEST_BATCH_SIZE = 1
+N_TEST_SAMPLES = 10000
+TRAIN_BATCH_SIZE = 1
+TEST_BATCH_SIZE = 100
 N_TRAIN_BATCH = int(N_TRAIN_SAMPLES / TRAIN_BATCH_SIZE)
 N_TEST_BATCH = int(N_TEST_SAMPLES / TEST_BATCH_SIZE)
 TRAIN_PRINT_PERIOD = 0.1
@@ -59,60 +61,16 @@ TARGET_FALSE = 3
 TARGET_TRUE = 15
 
 DT = 0.0003922
-DT_LIST = [0.0000816, 0.0000803]
+# DT_LIST = [0.000004, 0.0000043, 0.0000045, 0.000005, 0.0000053, 0.0000055, 0.000006, 0.000008, 0.0000095, 0.0000099, 0.00001, 0.0000115, 0.000012, 0.0000123, 0.0000125, 0.000013]
+# DT_LIST = [0.001, 0.0011, 0.0012, 0.0013, 0.0014, 0.0015, 0.0016, 0.0017, 0.0018, 0.0019, 0.002]
+# DT_LIST = [0.001, 0.00103, 0.00105, 0.00107, 0.0011, 0.00113, 0.00115, 0.00117, 0.0012]
+# DT_LIST = [0.001, 0.0010003, 0.0010005, 0.0010007, 0.001001, 0.0010013, 0.0010015, 0.0010017, 0.001002]
+# DT_LIST =[0.000390625, 3.92156862745098e-4, 3.937007874015748e-4, 3.952569169960474e-4, 0.000400625]
+# DT_LIST = [0.000330625, 0.000350625, 0.000370625, 0.000380625, 0.000390625, 3.92156862745098e-4, 0.000400625,  0.000405625, 0.000410625, 0.000420625, 0.000430625, 0.000440625, 0.000450625, 0.000470625, 0.000500625]
 
-def show_spike_differences(input_spike_times_continuous, input_spike_times_discrete, hidden_spike_times_continuous, hidden_spike_times_discrete, output_spikes_times, discrete_output_spike_times, label, DT, timestep, PLOT_DIR):
-    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(10, 15))
-
-    for neuron_index in range(input_spike_times_continuous.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax0.scatter(input_spike_times_continuous[neuron_index], [neuron_index] * input_spike_times_continuous.shape[1],
-                    label=f'Neuron {neuron_index}', color='b')
-
-    for neuron_index in range(input_spike_times_discrete.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax0.scatter(input_spike_times_discrete[neuron_index], [neuron_index] * input_spike_times_discrete.shape[1],
-                    label=f'Neuron {neuron_index}', color='r')
-
-    ax0.set_xlabel('Spike Times (s)')
-    ax0.set_ylabel('Neuron Index')
-    ax0.set_title('Scatter Plot of Input Layer Spike Times for Each Neuron')
-
-    plt.subplots_adjust(hspace=0.4)
-
-    for neuron_index in range(hidden_spike_times_continuous.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax1.scatter(hidden_spike_times_continuous[neuron_index], [neuron_index] * hidden_spike_times_continuous.shape[1],
-                    label=f'Neuron {neuron_index}', color='b')
-
-    for neuron_index in range(hidden_spike_times_discrete.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax1.scatter(hidden_spike_times_discrete[neuron_index], [neuron_index] * hidden_spike_times_discrete.shape[1],
-                    label=f'Neuron {neuron_index}', color='r')
-
-    ax1.set_xlabel('Spike Times (s)')
-    ax1.set_ylabel('Neuron Index')
-    ax1.set_title('Scatter Plot of Hidden Layer Spike Times for Each Neuron')
-
-    for neuron_index in range(discrete_output_spike_times.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax2.scatter(discrete_output_spike_times[neuron_index], [neuron_index] * discrete_output_spike_times.shape[1],
-                    label=f'Neuron {neuron_index}', color='b')
-
-    for neuron_index in range(output_spikes_times.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax2.scatter(output_spikes_times[neuron_index], [neuron_index] * output_spikes_times.shape[1],
-                    label=f'Neuron {neuron_index}', color='r')
-
-    ax2.set_xlabel('Spike Times (s)')
-    ax2.set_ylabel('Neuron Index')
-    ax2.set_title('Scatter Plot of Output Layer Spike Times for Each Neuron')
-    ax2.hlines(label, 0, 0.2, color='r', linestyles='dashed', label=f'True Label')
-    plt.subplots_adjust(hspace=0.4)
-    plt.suptitle("Spike times for a forward pass of a digit " + str(label) + " using a DT of " + str(DT))
-
-    plt.savefig( PLOT_DIR / ('spike_times_plot_' + str(timestep) + ".png"))
-    plt.show()
+# DT_LIST = utils.generate_dt_list(3.92156862745098e-4, 785,0.000001)
+DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0000, max_dt=0.01, step=0.00001)
+# DT_LIST = [0.003]
 
 # Plot parameters
 EXPORT_METRICS = True
@@ -126,20 +84,6 @@ def weight_initializer(n_post: int, n_pre: int) -> cp.ndarray:
     return cp.random.uniform(-1.0, 1.0, size=(n_post, n_pre), dtype=cp.float32)
 
 
-def discrete(spikes: cp.ndarray, DT: float):
-    # Create a mask for finite values
-    finite_mask = (spikes != cp.inf)
-
-    # Initialize the output array with infinities
-    discrete_spikes = cp.full(spikes.shape, cp.inf, dtype=spikes.dtype)
-
-    # Compute the discrete spikes for finite values using vectorized operations
-    finite_spikes = spikes[finite_mask]
-    discrete_spikes_finite = finite_spikes + (DT - np.fmod(finite_spikes, DT))
-
-    # Assign the computed values to the appropriate locations
-    discrete_spikes[finite_mask] = discrete_spikes_finite
-    return discrete_spikes
 
 def add_monitors(network):
     # Metrics
@@ -182,6 +126,8 @@ def create_network(network_config):
     network.add_layer(input_layer, input=True)
     previous_layer = input_layer
     for i, neurons in enumerate(network_config):
+        # DT = DT_LIST[i]
+        # print(DT)
         curr_layer = LIFLayer(previous_layer=previous_layer, n_neurons=neurons, tau_s=TAU_S_1,
                             theta=THRESHOLD_HAT_1,
                             delta_theta=DELTA_THRESHOLD_1,
@@ -205,29 +151,29 @@ def create_network(network_config):
 
 def test(network, dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor, test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_monitors_manager, test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor):
     test_time_monitor.start()
-    for batch_idx in range(N_TEST_BATCH):
-        spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
-        if DT != 0.0:
-            discrete_spikes = discrete(spikes, DT)
-        else:
-            discrete_spikes = spikes
-        network.reset()
-        network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
-        out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
 
-        pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
-        loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
+    # dataset.shuffle()
+    spikes, n_spikes, labels = dataset.get_test_batch(0, TEST_BATCH_SIZE)
+    if DT != 0.0:
+        discrete_spikes = utils.discrete(spikes, DT)
+    else:
+        discrete_spikes = spikes
+    network.reset()
+    network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
+    out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
+    pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
+    loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
 
-        pred_cpu = pred.get()
-        loss_cpu = loss.get()
-        test_loss_monitor.add(loss_cpu)
-        test_accuracy_monitor.add(pred_cpu, labels)
+    pred_cpu = pred.get()
+    loss_cpu = loss.get()
+    test_loss_monitor.add(loss_cpu)
+    test_accuracy_monitor.add(pred_cpu, labels)
 
-        for l, mon in test_spike_counts_monitors.items():
-            mon.add(l.spike_trains[1])
+    for l, mon in test_spike_counts_monitors.items():
+        mon.add(l.spike_trains[1])
 
-        for l, mon in test_silent_monitors.items():
-            mon.add(l.spike_trains[1])
+    for l, mon in test_silent_monitors.items():
+        mon.add(l.spike_trains[1])
     # Here we want to test how the network performs on the same dataset throughout training
     # Testing hypothesis if spikes get pushed earlier and discretization does not affect so much later epochs
     # spikes, n_spikes, labels = dataset.get_test_batch(0,TEST_BATCH_SIZE)  # Using input 0
@@ -250,23 +196,9 @@ def test(network, dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor
     acc = records[test_accuracy_monitor]
     return acc
 
-def mse_loss(spike_train, discrete_spike_train):
-    mse = 0.0
-    total_count = 0
-    for neuron_index in range(spike_train.shape[0]):
-        i = 0
-        while i < spike_train.shape[1] and spike_train[neuron_index][i] != np.inf:
-            mse = mse + (discrete_spike_train[neuron_index][i] - spike_train[neuron_index][i]) ** 2
-            i = i + 1
-            total_count += 1
 
-    if total_count > 0:
-        # print("MSE IS " + str(mse) + "and total count is " + str(total_count))
-        return mse / total_count
-    else:
-        return 0
 
-NR_EXPERIMENTS = 10
+NR_EXPERIMENTS = 1
 
 
 print("Loading datasets...")
@@ -275,39 +207,40 @@ print("Loading datasets...")
 loss_fct = SpikeCountClassLoss(target_false=TARGET_FALSE, target_true=TARGET_TRUE)
 optimizer = AdamOptimizer(learning_rate=LEARNING_RATE)
 
-network_configs=[[800, 800, 800, 800, 800, 800, 800]] # Problem, make sure the biggest network is last!
-dataset = Dataset_Mnist(path=DATASET_PATH_FMNIST)
+network_configs=[[800, 800, 800, 800, 800, 800]] # Problem, make sure the biggest network is last!
+dataset = Dataset_Fmnist(path=DATASET_PATH_FMNIST)
+# dataset = Dataset_Emnist(path=DATASET_PATH_EMNIST)
 # dataset_emnist = Dataset_Emnist(path=DATASET_PATH_EMNIST)
 # dataset_fmnist = Dataset_Fmnist(path=DATASET_PATH_FMNIST)
 
-dataset_name = 'Fashion MNIST'
+dataset_name = 'MNIST'
 
-network = create_network(network_configs[-1]) # Because of the DF initialization
+def run_experiment(dt):
+    global DT
+    DT = dt
+    network = create_network(network_configs[-1]) # Because of the DF initialization
 
-mse = pd.DataFrame()
-mse['Layers'] = np.zeros((len(network_configs), ))
-mse['Spike Count'] = np.empty((len(network_configs), ))
-mse['Dataset'] = np.empty((len(network_configs), ))
+    mse = pd.DataFrame()
+    mse['Layers'] = np.zeros((len(network_configs), ))
+    # mse['Spike Count'] = np.empty((len(network_configs), ))
 
-# Add columns to track both average and standard deviation
-for layer in network.layers:
-    mse[layer.name] = np.zeros((len(network_configs), ))  # For average MSE loss
-    mse[layer.name + ' StdDev'] = np.zeros((len(network_configs), ))  # For standard deviation
+    # Add columns to track both average and standard deviation
+    for layer in network.layers:
+        mse[layer.name] = np.zeros((len(network_configs), ))  # For average MSE loss
+        mse[layer.name + ' StdDev'] = np.zeros((len(network_configs), ))  # For standard deviation
+    #
+    # for layer in network.layers:
+    #     mse['Spike Count ' + layer.name] = np.zeros((len(network_configs), ))
 
-for layer in network.layers:
-    mse['Spike Count ' + layer.name] = np.zeros((len(network_configs), ))
+    # Temporary storage for per-experiment losses to calculate standard deviation
+    layer_losses = {layer.name: [[] for _ in range(len(network_configs))] for layer in network.layers}
 
-# Temporary storage for per-experiment losses to calculate standard deviation
-layer_losses = {layer.name: [[] for _ in range(len(network_configs))] for layer in network.layers}
+    for i, config in enumerate(network_configs):
+            mse['Layers'][i] = len(config)
+            print("Creating network for network with " + str(len(config)) + " layers")
 
-for i, config in enumerate(network_configs):
-        mse.loc[i, 'Layers'] = len(config)
-        mse['Dataset'] = mse['Dataset'].astype(object)  # Ensure column can store strings
-        mse.loc[i, 'Dataset'] = dataset_name  # Assign the dataset name
-        print("Creating network for network with " + str(len(config)) + " layers")
-
-        for experiment in range(NR_EXPERIMENTS):
-            print(f"Experiment {experiment + 1}/{NR_EXPERIMENTS} for network with {len(config)} layers")
+            # for experiment in range(NR_EXPERIMENTS):
+            # print(f"Experiment {experiment + 1}/{NR_EXPERIMENTS} for network with {len(config)} layers")
             network = create_network(config)
             (train_monitors_manager, train_accuracy_monitor, train_loss_monitor,
              train_time_monitor, train_silent_label_monitor, test_monitors_manager,
@@ -319,71 +252,69 @@ for i, config in enumerate(network_configs):
                  test_loss_monitor, test_silent_monitors, test_monitors_manager,
                  test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
 
-            spikes, n_spikes, labels = dataset.get_test_batch(0, TEST_BATCH_SIZE)
-            out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-
+            # dataset.shuffle()
 
             for layer in network.layers:
-                loss = mse_loss(layer.spike_trains[0].get()[0], layer.spike_trains[2].get()[0])
-                mse.loc[i, layer.name] += loss  # Accumulate the loss directly in the DataFrame
-                layer_losses[layer.name][i].append(loss)
-                mse.loc[i, 'Spike Count'] += len(
-                    layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
-                )
-                mse.loc[i, 'Spike Count ' + layer.name] += len(
-                    layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
-                )
+                loss = utils.mse_loss(layer.spike_trains[0].get(), layer.spike_trains[2].get())
+                mse[layer.name][i] += loss  # Accumulate the loss directly in the DataFrame
+                # layer_losses[layer.name][i].append(loss)  # Store the loss for variance calculation
+                # mse['Spike Count'][i] += len(
+                #     layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
+                # )
+                # mse['Spike Count ' + layer.name][i] += len(
+                #     layer.spike_trains[0].get()[0][(layer.spike_trains[0].get()[0] != np.inf)]
+                # )
 
-        # Average the results after all experiments
-        mse.loc[i, 'Spike Count'] /= NR_EXPERIMENTS
+            # Average the results after all experiments
+            # mse['Spike Count'][i] /= NR_EXPERIMENTS
+            for layer in network.layers:
+                mse[layer.name][i] /= NR_EXPERIMENTS  # Average the loss for each layer
 
-        for layer in network.layers:
-            mse.loc[i, layer.name] /= NR_EXPERIMENTS  # Average the loss for each layer
+                # Compute standard deviation
+                # mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
 
-            # Compute standard deviation
-            mse.loc[i, layer.name + ' StdDev'] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
+    mse.to_csv("mnist_experiments", index=False)
+    utils.plot_mse_stdev(mse, DT)
 
-mse.to_csv("mnist_experiments", index=False)
 
-def plot_mse_stdev(mse_df):
-    # Iterate over each layer configuration (row) in the DataFrame
-    for i, row in mse_df.iterrows():
-        layer_configuration = int(row["Layers"])
+def run_input_layer():
+    network_config = [800, 800]
+    # network = create_network(network_config) # Because of the DF initialization
 
-        # Extract MSE and StdDev columns for this configuration, ignoring Output Layer
-        mse_values = {}
-        stddev_values = {}
+    mse = pd.DataFrame()
+    mse['DTs'] = np.zeros((len(network_configs), ))
+    global DT
+    for DT in DT_LIST:
+        mse["DT="+str(DT)] = 0  # For average MSE loss
 
-        for column in mse_df.columns:
-            if "StdDev" in column and "Output layer" not in column and "Input layer" not in column:  # Ignore Output Layer
-                layer_name = column.replace(" StdDev", "")
-                if layer_name in mse_df.columns:
-                    mse_values[layer_name] = row[layer_name]
-                    stddev_values[layer_name] = row[column]
 
-        # Prepare plot data
-        layers = list(mse_values.keys())
-        mse = list(mse_values.values())
-        stddev = list(stddev_values.values())
+    for i, deltat in enumerate(DT_LIST):
+            DT = deltat
+            network = create_network(network_config)
+            (train_monitors_manager, train_accuracy_monitor, train_loss_monitor,
+             train_time_monitor, train_silent_label_monitor, test_monitors_manager,
+             test_accuracy_monitor, test_loss_monitor, test_silent_monitors, test_time_monitor,
+             test_norm_monitors, test_learning_rate_monitor, test_spike_counts_monitors) = add_monitors(
+                network)
+            test(network, dataset, loss_fct, 1.0, optimizer, test_time_monitor, test_accuracy_monitor,
+                 test_loss_monitor, test_silent_monitors, test_monitors_manager,
+                 test_spike_counts_monitors, test_norm_monitors, test_learning_rate_monitor)
 
-        # Create a plot for the current configuration
-        plt.figure(figsize=(10, 6))
-        plt.plot(layers, mse, marker="o", label="MSE", linestyle="-")
-        plt.fill_between(layers,
-                         [m - s for m, s in zip(mse, stddev)],
-                         [m + s for m, s in zip(mse, stddev)],
-                         color="blue", alpha=0.2, label="MSE ± StdDev")
+            # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get() + 3.8e-3, DT)
+            # loss = utils.mse_loss(network.layers[0].spike_trains[0].get() + 3.8e-3,  discrete_spikes_simple)
+            # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get(), DT)
+            loss = utils.mse_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get())
+            # loss = utils.vp_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get(), q=5.0)
+            mse["DT="+str(deltat)] = loss  # Accumulate the loss directly in the DataFrame
+            print("The loss is " + str(loss))
+            print("The number is " + str(i))
+                # Compute standard deviation
+                # mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
 
-        # Customize the plot
-        plt.xlabel("Layer", fontsize=12)
-        plt.ylabel("MSE", fontsize=12)
-        plt.title(f"Layer Configuration {layer_configuration}: MSE and StdDev (For Fashion MNIST) for DT = {DT}", fontsize=14)
-        plt.xticks(rotation=45, ha="right")
-        plt.grid(axis="y", linestyle="--", alpha=0.6)
-        plt.tight_layout()
-        plt.legend()
+    mse.to_csv("mnist_experiments_dt", index=False)
+    utils.plot_single_row_dt("mnist_experiments_dt", 'FASHION_MNIST')
+#
+# for dt in DT_LIST:
+#     run_experiment(dt)
 
-        # Show the plot for the current layer configuration
-        plt.show()
-
-plot_mse_stdev(mse)
+run_input_layer()

@@ -7,6 +7,9 @@ import numpy
 import numpy as np
 import pandas as pd
 import sys
+
+from tqdm import tqdm
+
 import utils
 
 sys.path.insert(0, "../../")  # Add repository root to python path
@@ -17,12 +20,13 @@ from bats.Losses import *
 from bats.Network import Network
 from bats.Optimizers import *
 
-from Dataset import Dataset as Dataset_Mnist
+from Dataset import Dataset as Dataset_Emnist
 
 # Dataset
 DATASET_PATH_FMNIST = Path("../../datasets/")
 DATASET_PATH_EMNIST = Path("../../datasets/emnist-balanced.mat")
 DATASET_PATH_MNIST = Path("../../datasets/mnist.npz")
+DATASET_PATH = Path("../../datasets/")
 
 N_INPUTS = 28 * 28
 SIMULATION_TIME = 0.2
@@ -35,7 +39,7 @@ DELTA_THRESHOLD_1 = 1 * THRESHOLD_HAT_1
 SPIKE_BUFFER_SIZE_1 = 30
 
 # Output_layer
-N_OUTPUTS = 10
+N_OUTPUTS = 20
 TAU_S_OUTPUT = 0.130
 THRESHOLD_HAT_OUTPUT = 1.3
 DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
@@ -63,11 +67,13 @@ TARGET_TRUE = 15
 DT = 0.0003922
 # DT_LIST = [0.000004, 0.0000043, 0.0000045, 0.000005, 0.0000053, 0.0000055, 0.000006, 0.000008, 0.0000095, 0.0000099, 0.00001, 0.0000115, 0.000012, 0.0000123, 0.0000125, 0.000013]
 # DT_LIST = [0.002, 0.003, 0.004, 0.0043, 0.0045, 0.005, 0.0053, 0.0055, 0.006, 0.008, 0.0095, 0.0099]
-# DT_LIST = [1.52136862745097e-4, 2.52136862745097e-4, 3.12136862745097e-4, 3.52136862745097e-4, 3.82136862745097e-4, 3.90136862745097e-4, 3.92136862745097e-4, 3.921578e-4, 3.921668e-4, 4.021668e-4, 4.321668e-4, 4.521668e-4]
-# DT_LIST = [1.52136862745097e-3, 2.52136862745097e-3, 3.12136862745097e-3, 3.52136862745097e-3, 3.82136862745097e-3, 3.90136862745097e-3, 3.92136862745097e-3, 3.921578e-3, 3.921668e-3, ]
-# DT_LIST = [3.891050583657588e-4, 0.000390625, 3.92156862745098e-4, 3.937007874015748e-4]
+
+# DT_LIST =[0.000390625, 3.92156862745098e-4, 0.000400625,  0.000405625, 0.000410625, 0.000420625]
+
+# DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0000, max_dt=0.01, step=0.00001)
+DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0005, max_dt=0.0006, step=0.00001)
+
 # DT_LIST = [0.003]
-DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0002, max_dt=0.001, step=0.00001)
 
 # Plot parameters
 EXPORT_METRICS = True
@@ -187,7 +193,7 @@ def test(network, dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor
     test_learning_rate_monitor.add(optimizer.learning_rate)
 
     records = test_monitors_manager.record(epoch_metrics)
-    test_monitors_manager.print(epoch_metrics)
+    # test_monitors_manager.print(epoch_metrics)
     # test_monitors_manager.export()
 
     acc = records[test_accuracy_monitor]
@@ -205,8 +211,7 @@ loss_fct = SpikeCountClassLoss(target_false=TARGET_FALSE, target_true=TARGET_TRU
 optimizer = AdamOptimizer(learning_rate=LEARNING_RATE)
 
 network_configs=[[800, 800, 800, 800, 800, 800]] # Problem, make sure the biggest network is last!
-dataset = Dataset_Mnist(path=DATASET_PATH_MNIST)
-dataset.shuffle()
+dataset = Dataset_Emnist(path=DATASET_PATH)
 # dataset = Dataset_Emnist(path=DATASET_PATH_EMNIST)
 # dataset_emnist = Dataset_Emnist(path=DATASET_PATH_EMNIST)
 # dataset_fmnist = Dataset_Fmnist(path=DATASET_PATH_FMNIST)
@@ -276,7 +281,7 @@ def run_experiment(dt):
 
 
 def run_input_layer():
-    network_config = [800, 800]
+    network_config = [128]
     # network = create_network(network_config) # Because of the DF initialization
 
     mse = pd.DataFrame()
@@ -284,9 +289,9 @@ def run_input_layer():
     global DT
     for DT in DT_LIST:
         mse["DT="+str(DT)] = 0  # For average MSE loss
+    diffs = []
 
-
-    for i, deltat in enumerate(DT_LIST):
+    for i, deltat in tqdm(enumerate(DT_LIST), total=len(DT_LIST), desc="Processing DTs"):
             DT = deltat
             network = create_network(network_config)
             (train_monitors_manager, train_accuracy_monitor, train_loss_monitor,
@@ -301,15 +306,32 @@ def run_input_layer():
             # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get() + 3.8e-3, DT)
             # loss = utils.mse_loss(network.layers[0].spike_trains[0].get() + 3.8e-3,  discrete_spikes_simple)
             # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get(), DT)
-            loss = utils.mse_loss(network.layers[1].spike_trains[0].get(), network.layers[1].spike_trains[2].get())
+            loss = utils.mse_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get())
             # loss = utils.vp_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get(), q=5.0)
             mse["DT="+str(deltat)] = loss  # Accumulate the loss directly in the DataFrame
-            print("The loss is " + str(loss))
-                # Compute standard deviation
+            # print("The loss is " + str(loss))
+
+            diff = loss - (deltat / np.sqrt(3))
+            diffs.append((i, deltat, float(loss), diff))
+
+            # Compute standard deviation
                 # mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
 
+    diff_df = pd.DataFrame(diffs, columns=["Index", "DT", "Loss", "AbsDiff"])
+
+    # Get top 5 largest and smallest differences
+    top5 = diff_df.nlargest(10, "AbsDiff")
+    bottom5 = diff_df.nsmallest(10, "AbsDiff")
+
+    print("\n🔺 Top 5 largest |loss - index/sqrt(3)| differences:")
+    print(top5)
+
+    print("\n🟢 Top 5 smallest |loss - index/sqrt(3)| differences:")
+    print(bottom5)
+
+
     mse.to_csv("mnist_experiments_dt", index=False)
-    utils.plot_single_row_dt("mnist_experiments_dt")
+    utils.plot_single_row_dt("mnist_experiments_dt", 'EMNIST')
 #
 # for dt in DT_LIST:
 #     run_experiment(dt)

@@ -32,7 +32,7 @@ SIMULATION_TIME = 0.2
 # Somewhere between this range [0.01, 0.007]
 
 # Hidden layer
-N_NEURONS_1 = 800
+N_NEURONS_1 = 100
 TAU_S_1 = 0.130
 THRESHOLD_HAT_1 = 0.2
 DELTA_THRESHOLD_1 = 1 * THRESHOLD_HAT_1
@@ -46,7 +46,7 @@ DELTA_THRESHOLD_OUTPUT = 1 * THRESHOLD_HAT_OUTPUT
 SPIKE_BUFFER_SIZE_OUTPUT = 30
 
 # Training parameters
-N_TRAINING_EPOCHS = 10
+N_TRAINING_EPOCHS = 20
 N_TRAIN_SAMPLES = 60000
 N_TEST_SAMPLES = 10000
 TRAIN_BATCH_SIZE = 50
@@ -223,7 +223,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
     print("Training...")
 
     output_spike_count_target = []
-    overall_average_probabilities = []
+    # overall_average_probabilities = []
 
     if (SAVE_DIR / ("DT = " + str(DT))).exists():
         network.restore(SAVE_DIR / ("DT = " + str(DT)))
@@ -343,22 +343,18 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
                 #Here we want to test how the network performs on the same dataset throughout training
                 #Testing hypothesis if spikes get pushed earlier and discretization does not affect so much later epochs
                 # spikes, n_spikes, labels = dataset_test_hypothesis.get_test_batch(0, TEST_BATCH_SIZE) # Using input 0
-                if DT != 0.0:
-                    discrete_spikes = discrete(spikes, DT)
-                else:
-                    discrete_spikes = spikes
-                network.reset()
-                network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
+                # if DT != 0.0:
+                #     discrete_spikes = discrete(spikes, DT)
+                # else:
+                #     discrete_spikes = spikes
+                # network.reset()
+                # network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
                 # out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
                 # scatter_plot_spike_times(input_layer.spike_trains[2].get()[0], hidden_layer.spike_trains[2].get()[0], out_spikes.get()[0], discrete_out_spikes.get()[0], labels[0], DT, plot_count, PLOT_DIR)
                 # plot_count = plot_count + 1
 
                 for l, mon in test_norm_monitors.items():
                     mon.add(l.weights)
-
-                # overall_average_probabilities.append({latency: np.mean(probabilities) for latency, probabilities in
-                #                                  cumulative_probabilities.items()})
-                #print(overall_average_probabilities)
 
                 test_learning_rate_monitor.add(optimizer.learning_rate)
 
@@ -373,42 +369,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
                     print(f"Best accuracy: {np.around(best_acc, 2)}%, Networks save to: {SAVE_DIR}")
     test_monitors_manager.export()
     train_monitors_manager.export()
-    return (test_monitors_manager, train_monitors_manager, output_spike_count_target, best_acc) # , overall_average_probabilities)
-
-
-def calculate_average_across_experiments(results):
-    average_results = {}
-
-    for dt_index, dt_value in enumerate(DT_list):
-        dt_frames = [experiment[dt_index] for experiment in results]
-
-        # Concatenate DataFrames along the rows
-        concatenated_df = pd.concat(dt_frames, axis=0)
-
-        # Calculate the mean for each group of epochs
-        average_df = concatenated_df.groupby('Epochs').mean().reset_index()
-
-        average_results[dt_value] = average_df
-
-    return average_results
-
-
-def plot_metrics_across_dt(average_results):
-    # Get the metrics from the DataFrame columns, excluding 'Epochs'
-    example_df = next(iter(average_results.values()))
-    metrics = [col for col in example_df.columns if col != 'Epochs']
-
-    for metric in metrics:
-        plt.figure(figsize=(10, 6))
-        for dt_value, avg_df in average_results.items():
-            plt.plot(avg_df['Epochs'], avg_df[metric], label=f'DT = {dt_value}')
-
-        plt.grid(True)
-        plt.xlabel('Epochs')
-        plt.ylabel(metric)
-        plt.title(f'{metric} Across Epochs for Different DT values')
-        plt.legend()
-        plt.show()
+    return test_monitors_manager, train_monitors_manager, output_spike_count_target, best_acc  # , overall_average_probabilities)
 
 NR_EXPERIMENTS = 1
 
@@ -417,7 +378,7 @@ if __name__ == "__main__":
     all_results = []
     all_results_test = []
     # DT_list = [0.0003937, 0.00022272]
-    DT_list = [3.921568e-4, 3.921569e-4]
+    DT_list = [0.001]
     np.set_printoptions(threshold=sys.maxsize)
     # Dataset
     print("Loading datasets...")
@@ -441,5 +402,4 @@ if __name__ == "__main__":
             df.to_csv(EXPORT_DIR / ("Train DT = " + str(val)), index=False)
             df2.to_csv(EXPORT_DIR / ("Test DT = " + str(val)), index=False)
             # df3.to_csv(EXPORT_DIR / ("Prediction confidence for DT = " + str(val)), index=False)
-
 

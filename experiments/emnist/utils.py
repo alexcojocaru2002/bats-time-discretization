@@ -30,6 +30,7 @@ def show_spike_differences(input_spike_times_continuous, input_spike_times_discr
 
     for neuron_index in range(hidden_spike_times_continuous.shape[0]):
         # Plot spike times for the current neuron with a specific color
+        print(hidden_spike_times_continuous[neuron_index].shape)
         ax1.scatter(hidden_spike_times_continuous[neuron_index], [neuron_index] * hidden_spike_times_continuous.shape[1],
                     label=f'Neuron {neuron_index}', color='b')
 
@@ -144,6 +145,32 @@ def plot_mse_stdev(mse_df, DT):
         plt.show()
 
 
+
+def plot_single_row_dt(csv_path, dataset_name):
+    df = pd.read_csv(csv_path)
+
+    # Drop the 'DTs' column header and get the only row of data
+    row = df.iloc[0, 1:]  # skip first column (DTs)
+
+    # Extract DT values from column headers like "DT=0.001"
+    x = np.array([float(col.split('=')[1]) for col in row.index])
+    y = row.values.astype(float)
+
+    # Theoretical values: (dt / sqrt(3))
+    theoretical = (x / np.sqrt(3))
+
+    # Plot
+    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE')
+    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (dt/√3)')
+
+    plt.xlabel('Delta Time (DT)')
+    plt.ylabel('Input Layer MSE')
+    plt.title('MSE vs Delta Time (DT) for dataset ' + dataset_name)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
 def generate_dt_list_from_bounds(min_dt: float, max_dt: float, step: float) -> list:
     """
     Generate a list of DT values from min_dt to max_dt with the given step size.
@@ -166,34 +193,6 @@ def generate_dt_list_from_bounds(min_dt: float, max_dt: float, step: float) -> l
     num_steps = int((max_dt - min_dt) / step) + 1
     dt_list = [min_dt + i * step for i in range(num_steps) if min_dt + i * step <= max_dt]
     return dt_list
-
-
-
-def plot_single_row_dt(csv_path, dataset_name='MNIST'):
-    df = pd.read_csv(csv_path)
-
-    # Drop the 'DTs' column header and get the only row of data
-    row = df.iloc[0, 1:]  # skip first column (DTs)
-
-    # Extract DT values from column headers like "DT=0.001"
-    x = np.array([float(col.split('=')[1]) for col in row.index])
-    y = row.values.astype(float)
-
-    # Theoretical values: (dt / sqrt(3))
-    theoretical = (x / np.sqrt(3))
-
-    # Plot
-    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE')
-    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (dt/√3)')
-
-    plt.xlabel('Delta Time (DT)')
-    plt.ylabel('Input Layer MSE')
-    plt.title('MSE vs Delta Time (DT) for dataset ' + dataset_name)
-    # plt.xticks(x)
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
 
 def victor_purpura_distance(train1, train2, q):
     """
