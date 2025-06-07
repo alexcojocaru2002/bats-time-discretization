@@ -1,4 +1,8 @@
 import os
+from collections import defaultdict
+from glob import glob
+
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
@@ -84,11 +88,84 @@ def plot_metrics_across_dt(average_results, selected_metrics=None, start_epoch=1
         plt.show()
 
 
-# Step 4: Execute
-average_results = calculate_average_across_experiments(dt_to_dfs)
+def load_csv_metrics(base_folder, phase="Test"):
+    """
+    Loads CSVs like 'Test DT = 0.001' and groups them by DT value.
 
-plot_metrics_across_dt(
-    average_results,
-    selected_metrics=['Accuracy (%)', 'Hidden layer 1 spike counts'],
-    start_epoch=5
-)
+    Returns:
+        {
+            dt_str: list of DataFrames (one per experiment)
+        }
+    """
+    dt_data = defaultdict(list)
+    for exp_folder in os.listdir(base_folder):
+        exp_path = os.path.join(base_folder, exp_folder)
+        if not os.path.isdir(exp_path):
+            continue
+
+        for file in os.listdir(exp_path):
+            if file.startswith(f"{phase} DT ="):
+                dt_str = file.split('=')[1].strip()
+                file_path = os.path.join(exp_path, file)
+                try:
+                    df = pd.read_csv(file_path)
+                    dt_data[dt_str].append(df)
+                except Exception as e:
+                    print(f"Could not read {file_path}: {e}")
+    return dt_data
+
+
+def plot_metric_mean_std(base_folder, metric="Loss", phase="Test", start_epoch=0):
+    """
+    Plots the average ± std for a selected metric over epochs, grouped by DT.
+    """
+    dt_data = load_csv_metrics(base_folder, phase)
+
+    plt.figure(figsize=(10, 6))
+    for dt_str in sorted(dt_data.keys(), key=lambda x: float(x)):
+        dfs = dt_data[dt_str]
+        dfs_trimmed = []
+
+        for df in dfs:
+            # Filter from start_epoch onwards
+            df = df[df['Epochs'] >= start_epoch]
+            df = df[['Epochs', metric]].copy()
+            dfs_trimmed.append(df.set_index('Epochs'))
+
+        # Align all dataframes by Epoch index
+        aligned = pd.concat(dfs_trimmed, axis=1)
+        mean_series = aligned.mean(axis=1)
+        std_series = aligned.std(axis=1)
+
+        epochs = mean_series.index.to_numpy()
+        mean = mean_series.to_numpy()
+        std = std_series.to_numpy()
+
+        plt.plot(epochs, mean, label=f"DT = {dt_str}")
+        plt.fill_between(epochs, mean - std, mean + std, alpha=0.2)
+
+    plt.xlabel("Epochs")
+    plt.ylabel(metric)
+    plt.title(f"{metric} over Epochs ({phase}, mean ± std)")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+# Step 4: Execute
+# average_results = calculate_average_across_experiments(dt_to_dfs)
+#
+# plot_metrics_across_dt(
+#     average_results,
+#     selected_metrics=['Accuracy (%)', 'Hidden layer 1 spike counts'],
+#     start_epoch=5
+# )
+
+
+base_folder = "output_metrics"
+
+plot_metric_mean_std("output_metrics", metric="Accuracy (%)", phase="Test", start_epoch=5)
+plot_metric_mean_std("output_metrics", metric="Hidden layer 1 spike counts", phase="Test", start_epoch=5)
+plot_metric_mean_std("output_metrics", metric="Loss", phase="Train", start_epoch=5)
+plot_metric_mean_std("output_metrics", metric="Accuracy (%)", phase="Train", start_epoch=5)
+

@@ -6,38 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7cb2df54-35e8-4880-a5db-e202115b8bfa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Test DT = 0.0005" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Test DT = 0.001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Test DT = 0.002" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Test DT = 0.003" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Test DT = 0.004" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Test DT = 0.005" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Test DT = 0.006" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Train DT = 0.0005" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Train DT = 0.001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Train DT = 0.002" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Train DT = 0.003" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Train DT = 0.004" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Train DT = 0.005" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/Train DT = 0.006" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/accuracy_test.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/accuracy_test.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/accuracy_train.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/accuracy_train.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/loss_test.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/loss_test.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/loss_train.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/loss_train.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/spike_count_Hidden layer 1.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/spike_count_Hidden layer 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/spike_count_Output layer.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/spike_count_Output layer.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/weight_norm_Hidden layer 1.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/weight_norm_Hidden layer 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/weight_norm_Output layer.npz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/output_metrics/trash/experiment_0_ 678486136_248588494/weight_norm_Output layer.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/mnist/plot_results_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/plot_results_train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mnist/train_spike_count.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mnist/train_spike_count.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +43,7 @@
     "Python.utils.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/Work/bats/bats-time-discretization",
+    "last_opened_file_path": "D:/Work/learning-to-anonymize-faces",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -169,7 +138,7 @@
       <workItem from="1748507596408" duration="74000" />
       <workItem from="1748988558739" duration="20986000" />
       <workItem from="1749069201189" duration="6544000" />
-      <workItem from="1749249544092" duration="1004000" />
+      <workItem from="1749249544092" duration="7530000" />
     </task>
     <servers />
   </component>
@@ -180,8 +149,8 @@
     <SUITE FILE_PATH="coverage/bats_time_discretization$utils.coverage" NAME="utils Coverage Results" MODIFIED="1746797788289" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$train.coverage" NAME="train Coverage Results" MODIFIED="1749077253926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/fashion_mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$analysis_experiments_different_datasets.coverage" NAME="analysis_experiments_different_datasets Coverage Results" MODIFIED="1749077209126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:\Work\bats\bats-time-discretization\experiments\mnist" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$train_spike_count.coverage" NAME="train_spike_count Coverage Results" MODIFIED="1749250528916" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$train_spike_count.coverage" NAME="train_spike_count Coverage Results" MODIFIED="1749250564035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
     <SUITE FILE_PATH="coverage/bats_time_discretization$fourier_analysis.coverage" NAME="fourier_analysis Coverage Results" MODIFIED="1747658012674" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
-    <SUITE FILE_PATH="coverage/bats_time_discretization$plot_results_train.coverage" NAME="plot_results_train Coverage Results" MODIFIED="1749129399121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/fashion_mnist" />
+    <SUITE FILE_PATH="coverage/bats_time_discretization$plot_results_train.coverage" NAME="plot_results_train Coverage Results" MODIFIED="1749294389882" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/mnist" />
   </component>
 </project>
