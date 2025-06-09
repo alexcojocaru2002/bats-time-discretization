@@ -4,44 +4,7 @@ import numpy as np
 import sys
 import pandas as pd
 from matplotlib import pyplot as plt
-#
-# def calculate_average_across_experiments(results):
-#     average_results = {}
-#
-#     for dt_index, dt_value in enumerate(DT_list):
-#         dt_frames = [experiment[dt_index] for experiment in results]
-#
-#         # Concatenate DataFrames along the rows
-#         concatenated_df = pd.concat(dt_frames, axis=0)
-#
-#         # Calculate the mean for each group of epochs
-#         average_df = concatenated_df.groupby('Epochs').mean().reset_index()
-#
-#         average_results[dt_value] = average_df
-#
-#     return average_results
-#
-# def plot_metrics_across_dt(average_results):
-#     # Get the metrics from the DataFrame columns, excluding 'Epochs'
-#     example_df = next(iter(average_results.values()))
-#     metrics = [col for col in example_df.columns if col != 'Epochs']
-#
-#     for metric in metrics:
-#         plt.figure(figsize=(10, 6))
-#         for dt_value, avg_df in average_results.items():
-#             plt.plot(avg_df['Epochs'], avg_df[metric], label=f'DT = {dt_value}')
-#
-#         plt.grid(True)
-#         plt.xlabel('Epochs')
-#         plt.ylabel(metric)
-#         plt.title(f'{metric} Across Epochs for Different DT values')
-#         plt.legend()
-#         plt.show()
-#
-# # average_results = calculate_average_across_experiments(all_results)
-# average_results_test = calculate_average_across_experiments(all_results_test)
-# # plot_metrics_across_dt(average_results)
-# plot_metrics_across_dt(average_results_test)
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -61,6 +24,60 @@ def discrete(spikes: cp.ndarray, DT: float):
     # Assign the computed values to the appropriate locations
     discrete_spikes[finite_mask] = discrete_spikes_finite
     return discrete_spikes
+
+def scatter_plot_spike_times(input_spike_times, hidden_spike_times, hidden2_spike_times, output_spikes_times, discrete_output_spike_times, label, DT, timestep, PLOT_DIR):
+    fig, ((ax0, ax1), (ax2, ax3)) = plt.subplots(2, 2, figsize=(15, 15))
+
+    for neuron_index in range(input_spike_times.shape[0]):
+        # Plot spike times for the current neuron with a specific color
+        ax0.scatter(input_spike_times[neuron_index], [neuron_index] * input_spike_times.shape[1], label=f'Neuron {neuron_index}')
+    ax0.set_xlabel('Spike Times (s)')
+    ax0.set_ylabel('Neuron Index')
+    ax0.set_title('Scatter Plot of Input Layer Spike Times for Each Neuron')
+
+    for neuron_index in range(hidden_spike_times.shape[0]):
+        # Plot spike times for the current neuron with a specific color
+        ax1.scatter(hidden_spike_times[neuron_index], [neuron_index] * hidden_spike_times.shape[1], label=f'Neuron {neuron_index}')
+    ax1.set_xlabel('Spike Times (s)')
+    ax1.set_ylabel('Neuron Index')
+    ax1.set_title('Scatter Plot of Hidden Layer Spike Times for Each Neuron')
+
+    for neuron_index in range(hidden2_spike_times.shape[0]):
+        # Plot spike times for the current neuron with a specific color
+        ax2.scatter(hidden2_spike_times[neuron_index], [neuron_index] * hidden2_spike_times.shape[1], label=f'Neuron {neuron_index}')
+    ax2.set_xlabel('Spike Times (s)')
+    ax2.set_ylabel('Neuron Index')
+    ax2.set_title('Scatter Plot of Hidden Layer 2 Spike Times for Each Neuron')
+
+    for neuron_index in range(discrete_output_spike_times.shape[0]):
+        # Plot spike times for the current neuron with a specific color
+        ax3.scatter(discrete_output_spike_times[neuron_index], [neuron_index] * discrete_output_spike_times.shape[1],
+                    label=f'Neuron {neuron_index}', color='b')
+
+    for neuron_index in range(output_spikes_times.shape[0]):
+        # Plot spike times for the current neuron with a specific color
+        ax3.scatter(output_spikes_times[neuron_index], [neuron_index] * output_spikes_times.shape[1],
+                    label=f'Neuron {neuron_index}', color='r')
+
+    ax3.set_xlabel('Spike Times (s)')
+    ax3.set_ylabel('Neuron Index')
+    ax3.set_title('Scatter Plot of Output Layer Spike Times for Each Neuron')
+    ax3.hlines(label, 0, 0.2, color='r', linestyles='dashed', label=f'True Label')
+
+    plt.subplots_adjust(hspace=0.2, wspace=0.2)
+
+    plt.savefig(Path(PLOT_DIR) / ('spike_times_plot_' + str(timestep) + ".png"))
+    plt.show()
+
+
+def plot_heatmap(weights, title="Weight Heatmap"):
+    plt.figure(figsize=(10, 8))
+    plt.imshow(weights, aspect='auto', cmap='viridis')
+    plt.colorbar()
+    plt.title(title)
+    plt.xlabel('Input Neurons')
+    plt.ylabel('Output Neurons')
+    plt.show()
 
 
 def mse_loss(spike_train, discrete_spike_train):

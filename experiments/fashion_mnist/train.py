@@ -19,7 +19,6 @@ DATASET_PATH = Path("../../datasets/")
 
 N_INPUTS = 28 * 28
 SIMULATION_TIME = 0.2
-# LATENCY_TIMES_LIST = [0.02, 0.03, 0.05, 0.08, 0.1, 0.13, 0.15, 0.18, 0.2]
 
 # Hidden layer
 N_NEURONS_1 = 400
@@ -86,84 +85,6 @@ def discrete(spikes: cp.ndarray, DT: float):
 
     return discrete_spikes
 
-def calculate_latency_prob(discrete_out_spikes: cp.ndarray, labels):
-    # This is for latency
-    batch_size, num_neurons, time_steps = discrete_out_spikes.shape
-    # Convert LATENCY_TIMES_LIST to a CuPy array for efficient broadcasting
-    # latency_times_array = cp.array(LATENCY_TIMES_LIST)
-    # # Create a dictionary to store the results
-    # probabilities_list = {latency: [] for latency in LATENCY_TIMES_LIST}
-    # Get the labels as a CuPy array
-    # Extract spikes for the target neurons based on labels
-    target_spikes = cp.array([discrete_out_spikes[i, labels[i], :] for i in range(batch_size)])
-    # Loop over each latency time
-    # for latency in latency_times_array:
-    #     # Create a mask for spikes that occur before the given latency time
-    #     latency_mask = target_spikes <= latency
-    #     # print(latency_mask)
-    #     # Count the spikes for each batch and latency time
-    #     count_spikes = cp.sum(latency_mask, axis=1)
-    #     # print(count_spikes)
-    #     # Calculate probabilities and store in the list
-    #     probabilities_list[latency.item()] = (count_spikes / TARGET_TRUE).tolist()
-    # return probabilities_list
-
-
-
-def scatter_plot_spike_times(input_spike_times, hidden_spike_times, hidden2_spike_times, output_spikes_times, discrete_output_spike_times, label, DT, timestep, PLOT_DIR):
-    fig, ((ax0, ax1), (ax2, ax3)) = plt.subplots(2, 2, figsize=(15, 15))
-
-    for neuron_index in range(input_spike_times.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax0.scatter(input_spike_times[neuron_index], [neuron_index] * input_spike_times.shape[1], label=f'Neuron {neuron_index}')
-    ax0.set_xlabel('Spike Times (s)')
-    ax0.set_ylabel('Neuron Index')
-    ax0.set_title('Scatter Plot of Input Layer Spike Times for Each Neuron')
-
-    for neuron_index in range(hidden_spike_times.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax1.scatter(hidden_spike_times[neuron_index], [neuron_index] * hidden_spike_times.shape[1], label=f'Neuron {neuron_index}')
-    ax1.set_xlabel('Spike Times (s)')
-    ax1.set_ylabel('Neuron Index')
-    ax1.set_title('Scatter Plot of Hidden Layer Spike Times for Each Neuron')
-
-    for neuron_index in range(hidden2_spike_times.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax2.scatter(hidden2_spike_times[neuron_index], [neuron_index] * hidden2_spike_times.shape[1], label=f'Neuron {neuron_index}')
-    ax2.set_xlabel('Spike Times (s)')
-    ax2.set_ylabel('Neuron Index')
-    ax2.set_title('Scatter Plot of Hidden Layer 2 Spike Times for Each Neuron')
-
-    for neuron_index in range(discrete_output_spike_times.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax3.scatter(discrete_output_spike_times[neuron_index], [neuron_index] * discrete_output_spike_times.shape[1],
-                    label=f'Neuron {neuron_index}', color='b')
-
-    for neuron_index in range(output_spikes_times.shape[0]):
-        # Plot spike times for the current neuron with a specific color
-        ax3.scatter(output_spikes_times[neuron_index], [neuron_index] * output_spikes_times.shape[1],
-                    label=f'Neuron {neuron_index}', color='r')
-
-    ax3.set_xlabel('Spike Times (s)')
-    ax3.set_ylabel('Neuron Index')
-    ax3.set_title('Scatter Plot of Output Layer Spike Times for Each Neuron')
-    ax3.hlines(label, 0, 0.2, color='r', linestyles='dashed', label=f'True Label')
-
-    plt.subplots_adjust(hspace=0.2, wspace=0.2)
-
-    plt.savefig(Path(PLOT_DIR) / ('spike_times_plot_' + str(timestep) + ".png"))
-    plt.show()
-
-
-def plot_heatmap(weights, title="Weight Heatmap"):
-    plt.figure(figsize=(10, 8))
-    plt.imshow(weights, aspect='auto', cmap='viridis')
-    plt.colorbar()
-    plt.title(title)
-    plt.xlabel('Input Neurons')
-    plt.ylabel('Output Neurons')
-    plt.show()
-
 def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
     print("This network will be trained using DT = " + str(DT))
     np.random.seed(np_seed)
@@ -178,7 +99,6 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
     # Dataset
     print("Loading datasets...")
     dataset = Dataset(path=DATASET_PATH)
-    dataset_test_hypothesis = Dataset(path=DATASET_PATH)
 
     print("Creating network...")
     network = Network()
@@ -248,7 +168,7 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
 
     for epoch in range(N_TRAINING_EPOCHS):
         train_time_monitor.start()
-        # dataset.shuffle()
+        dataset.shuffle()
 
         # Learning rate decay
         if epoch > 0 and epoch % LR_DECAY_EPOCH == 0:
@@ -257,13 +177,11 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
         for batch_idx in range(N_TRAIN_BATCH):
             # Get next batch
             spikes, n_spikes, labels = dataset.get_train_batch(batch_idx, TRAIN_BATCH_SIZE)
-            # print(spikes[spikes!=np.inf])
             if DT != 0.0:
                 discrete_spikes = discrete(spikes, DT)
             else:
                 discrete_spikes = spikes
 
-            # print("Batch number : " + str(batch_idx) + "\n")
             # Inference
             network.reset()
             network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME, training=True)
@@ -300,26 +218,16 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
             training_steps += 1
             epoch_metrics = training_steps * TRAIN_BATCH_SIZE / N_TRAIN_SAMPLES
 
-            # plt.hist(errors.get()[0].flatten())
-            # plt.show()
-
             # Training metrics
             if training_steps % TRAIN_PRINT_PERIOD_STEP == 0:
                 # Compute metrics
-
-                # We average the probabilities per epoch to get a rough estimate of the confidence
-                # train_prediction_confidence_monitor.add(sum(epoch_spike_target) / len(epoch_spike_target))
-                # print(output_spike_count_target)
-
                 train_monitors_manager.record(epoch_metrics)
                 train_monitors_manager.print(epoch_metrics)
-
-                # train_monitors_manager.export()
 
             # Test evaluation
             if training_steps % TEST_PERIOD_STEP == 0:
                 test_time_monitor.start()
-                # cumulative_probabilities = {latency: [] for latency in LATENCY_TIMES_LIST}
+
                 for batch_idx in range(N_TEST_BATCH):
                     spikes, n_spikes, labels = dataset.get_test_batch(batch_idx, TEST_BATCH_SIZE)
                     if DT != 0.0:
@@ -329,16 +237,6 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                     network.reset()
                     network.forward(spikes, n_spikes, discrete_spikes, max_simulation=SIMULATION_TIME)
                     out_spikes, n_out_spikes, discrete_out_spikes = network.output_spike_trains
-
-                    # This is for latency
-                    # probabilities_list = calculate_latency_prob(discrete_out_spikes, labels)
-                    # # Calculate the average probabilities for each latency time using CuPy
-                    # average_probabilities = {latency: np.mean(probabilities) for latency, probabilities in
-                    #                          probabilities_list.items()}
-
-                    # Display the results
-                    # for latency, avg_prob in average_probabilities.items():
-                    #     cumulative_probabilities[latency].append(avg_prob)
 
                     pred = loss_fct.predict(discrete_out_spikes, n_out_spikes)
                     loss = loss_fct.compute_loss(discrete_out_spikes, n_out_spikes, labels)
@@ -374,10 +272,6 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
                 for l, mon in test_norm_monitors.items():
                     mon.add(l.weights)
 
-                # overall_average_probabilities.append({latency: np.mean(probabilities) for latency, probabilities in
-                #                                       cumulative_probabilities.items()})
-                # print(overall_average_probabilities)
-
                 test_learning_rate_monitor.add(optimizer.learning_rate)
 
                 records = test_monitors_manager.record(epoch_metrics)
@@ -396,14 +290,13 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
 
 
 
-NR_EXPERIMENTS = 1
+NR_EXPERIMENTS = 3
 
 if __name__ == "__main__":
     monitors_dict = {}
     all_results = []
     all_results_test = []
-    #np_seeds = [1399766615]
-    #cp_seeds = [40394794]
+
     DT_list = [0.0, 0.0005, 0.001, 0.002, 0.003, 0.004, 0.005]
     for i in range(0, NR_EXPERIMENTS):
         print("STARTING RUN NUMBER " + str(i))
@@ -411,13 +304,10 @@ if __name__ == "__main__":
         max_int = np.iinfo(np.int32).max
         np_seed = np.random.randint(low=0, high=max_int)
         cp_seed = np.random.randint(low=0, high=max_int)
-        #np_seed = np_seeds[i]
-        #cp_seed = cp_seeds[i]
+
         print(f"Numpy seed: {np_seed}, Cupy seed: {cp_seed}")
         EXPORT_DIR = Path("./output_metrics/" + "experiment_" + str(i) + "_ " + str(str(np_seed) + "_" + str(cp_seed)))
 
-        #train_model_results = []
-        #test_model_results = []
         for val in DT_list:
             DT = val
             PLOT_DIR = Path('./scatter_plots/' + 'DT = ' + str(val))
@@ -430,6 +320,3 @@ if __name__ == "__main__":
 
             df.to_csv(EXPORT_DIR / ("Train DT = " + str(val)), index=False)
             df2.to_csv(EXPORT_DIR / ("Test DT = " + str(val)), index=False)
-            # df3.to_csv(EXPORT_DIR / ("Prediction Confidence DT = " + str(val)), index=False)
-        #all_results.append(train_model_results)
-        #all_results_test.append(test_model_results)

@@ -202,8 +202,8 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
     best_acc = 0
     print("Training...")
 
-    if (SAVE_DIR / ("DT = " + str(DT))).exists():
-        network.restore(SAVE_DIR / ("DT = " + str(DT)))
+    # if (SAVE_DIR / ("DT = " + str(DT))).exists():
+    #     network.restore(SAVE_DIR / ("DT = " + str(DT)))
 
     for epoch in tqdm(range(N_TRAINING_EPOCHS), desc="Training epochs"):
         train_time_monitor.start()
