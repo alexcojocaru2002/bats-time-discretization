@@ -1,5 +1,6 @@
 import csv
 import math
+import os
 from pathlib import Path
 import cupy as cp
 import matplotlib.pyplot as plt
@@ -83,7 +84,6 @@ def discrete(spikes: cp.ndarray, DT: float):
 def mse_loss(spike_train, discrete_spike_train):
     mse = 0.0
     total_count = 0
-    print(spike_train.shape)
 
     for batch_idx in range(spike_train.shape[0]):
         for neuron_index in range(spike_train.shape[1]):
@@ -145,8 +145,8 @@ def plot_mse_stdev(mse_df, DT):
         plt.show()
 
 
-
-def plot_single_row_dt(csv_path, dataset_name):
+# Plots the mse value for all the DTs in the dataframe
+def plot_single_row_dt(csv_path, dataset_name='MNIST'):
     df = pd.read_csv(csv_path)
 
     # Drop the 'DTs' column header and get the only row of data
@@ -160,15 +160,18 @@ def plot_single_row_dt(csv_path, dataset_name):
     theoretical = (x / np.sqrt(3))
 
     # Plot
-    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE')
-    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (dt/√3)')
+    plt.figure(figsize=(8, 6))
+    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE', linewidth=2.5)
+    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (''Δt/√3)', linewidth=2.5)
 
-    plt.xlabel('Delta Time (DT)')
-    plt.ylabel('Input Layer MSE')
-    plt.title('MSE vs Delta Time (DT) for dataset ' + dataset_name)
-    plt.legend()
+    plt.xlabel('Delta Time (Δt)', fontsize=15)
+    plt.ylabel('Input Layer MSE', fontsize=15)
+    plt.legend(fontsize=15)
     plt.grid(True)
     plt.tight_layout()
+    filename = "emnist_mse.pdf"
+    save_path = os.path.join("output_metrics", filename)
+    plt.savefig(save_path)
     plt.show()
 
 def generate_dt_list_from_bounds(min_dt: float, max_dt: float, step: float) -> list:
@@ -193,54 +196,3 @@ def generate_dt_list_from_bounds(min_dt: float, max_dt: float, step: float) -> l
     num_steps = int((max_dt - min_dt) / step) + 1
     dt_list = [min_dt + i * step for i in range(num_steps) if min_dt + i * step <= max_dt]
     return dt_list
-
-def victor_purpura_distance(train1, train2, q):
-    """
-    Compute Victor–Purpura distance between two spike trains.
-    train1, train2: 1D arrays of spike times (with np.inf as padding)
-    q: cost parameter (e.g., 1.0)
-    """
-    # Remove np.inf padding
-    t1 = train1[np.isfinite(train1)]
-    t2 = train2[np.isfinite(train2)]
-
-    n = len(t1)
-    m = len(t2)
-
-    # Initialize DP matrix
-    D = np.zeros((n + 1, m + 1))
-
-    # Base cases
-    for i in range(1, n + 1):
-        D[i, 0] = i  # Cost of deleting i spikes
-    for j in range(1, m + 1):
-        D[0, j] = j  # Cost of inserting j spikes
-
-    # Dynamic programming
-    for i in range(1, n + 1):
-        for j in range(1, m + 1):
-            cost_move = D[i - 1, j - 1] + q * abs(t1[i - 1] - t2[j - 1])
-            cost_del = D[i - 1, j] + 1
-            cost_ins = D[i, j - 1] + 1
-            D[i, j] = min(cost_move, cost_del, cost_ins)
-
-    return D[n, m]
-
-def vp_loss(spike_train, discrete_spike_train, q=1.0):
-    """
-    spike_train: [batch_size, num_neurons, max_spikes]
-    discrete_spike_train: same shape
-    q: VP move cost parameter
-    """
-    total_distance = 0.0
-    total_count = 0
-
-    for batch_idx in range(spike_train.shape[0]):
-        for neuron_index in range(spike_train.shape[1]):
-            true_train = spike_train[batch_idx, neuron_index]
-            pred_train = discrete_spike_train[batch_idx, neuron_index]
-            dist = victor_purpura_distance(true_train, pred_train, q)
-            total_distance += dist
-            total_count += 1
-
-    return total_distance / total_count if total_count > 0 else 0

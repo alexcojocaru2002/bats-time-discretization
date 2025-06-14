@@ -1,5 +1,6 @@
 import csv
 import math
+import os
 from pathlib import Path
 import cupy as cp
 import matplotlib.pyplot as plt
@@ -82,7 +83,7 @@ def discrete(spikes: cp.ndarray, DT: float):
 def mse_loss(spike_train, discrete_spike_train):
     mse = 0.0
     total_count = 0
-    print(spike_train.shape)
+    # print(spike_train.shape)
 
     for batch_idx in range(spike_train.shape[0]):
         for neuron_index in range(spike_train.shape[1]):
@@ -168,7 +169,7 @@ def generate_dt_list_from_bounds(min_dt: float, max_dt: float, step: float) -> l
     return dt_list
 
 
-
+# Plots the mse value for all the DTs in the dataframe
 def plot_single_row_dt(csv_path, dataset_name='MNIST'):
     df = pd.read_csv(csv_path)
 
@@ -183,15 +184,17 @@ def plot_single_row_dt(csv_path, dataset_name='MNIST'):
     theoretical = (x / np.sqrt(3))
 
     # Plot
-    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE')
-    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (dt/√3)')
+    plt.figure(figsize=(8, 6))
+    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE', linewidth=2.5)
+    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (''Δt/√3)', linewidth=2.5)
 
-    plt.xlabel('Delta Time (DT)')
-    plt.ylabel('Input Layer MSE')
-    plt.title('MSE vs Delta Time (DT) for dataset ' + dataset_name)
-    # plt.xticks(x)
-    plt.legend()
+    plt.xlabel('Delta Time (Δt)', fontsize=15)
+    plt.ylabel('Input Layer MSE', fontsize=15)
+    plt.legend(fontsize=15)
     plt.grid(True)
     plt.tight_layout()
+    filename = "mnist_mse.pdf"
+    save_path = os.path.join("output_metrics", filename)
+    plt.savefig(save_path)
     plt.show()
 

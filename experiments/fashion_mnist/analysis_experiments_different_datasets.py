@@ -317,4 +317,5 @@ def run_input_layer():
 # for dt in DT_LIST:
 #     run_experiment(dt)
 
-run_input_layer()
+# run_input_layer()
+utils.plot_single_row_dt("mnist_experiments_dt", 'FASHION_MNIST')

@@ -7,6 +7,9 @@ import numpy
 import numpy as np
 import pandas as pd
 import sys
+
+from tqdm import tqdm
+
 import utils
 
 sys.path.insert(0, "../../")  # Add repository root to python path
@@ -67,7 +70,7 @@ DT = 0.0003922
 # DT_LIST = [1.52136862745097e-3, 2.52136862745097e-3, 3.12136862745097e-3, 3.52136862745097e-3, 3.82136862745097e-3, 3.90136862745097e-3, 3.92136862745097e-3, 3.921578e-3, 3.921668e-3, ]
 # DT_LIST = [3.891050583657588e-4, 0.000390625, 3.92156862745098e-4, 3.937007874015748e-4]
 # DT_LIST = [0.003]
-DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0002, max_dt=0.001, step=0.00001)
+DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0, max_dt=0.01, step=0.00001)
 
 # Plot parameters
 EXPORT_METRICS = True
@@ -187,7 +190,7 @@ def test(network, dataset, loss_fct, epoch_metrics, optimizer, test_time_monitor
     test_learning_rate_monitor.add(optimizer.learning_rate)
 
     records = test_monitors_manager.record(epoch_metrics)
-    test_monitors_manager.print(epoch_metrics)
+    # test_monitors_manager.print(epoch_metrics)
     # test_monitors_manager.export()
 
     acc = records[test_accuracy_monitor]
@@ -286,7 +289,7 @@ def run_input_layer():
         mse["DT="+str(DT)] = 0  # For average MSE loss
 
 
-    for i, deltat in enumerate(DT_LIST):
+    for i, deltat in enumerate(tqdm(DT_LIST)):
             DT = deltat
             network = create_network(network_config)
             (train_monitors_manager, train_accuracy_monitor, train_loss_monitor,
@@ -301,10 +304,10 @@ def run_input_layer():
             # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get() + 3.8e-3, DT)
             # loss = utils.mse_loss(network.layers[0].spike_trains[0].get() + 3.8e-3,  discrete_spikes_simple)
             # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get(), DT)
-            loss = utils.mse_loss(network.layers[1].spike_trains[0].get(), network.layers[1].spike_trains[2].get())
+            loss = utils.mse_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get())
             # loss = utils.vp_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get(), q=5.0)
             mse["DT="+str(deltat)] = loss  # Accumulate the loss directly in the DataFrame
-            print("The loss is " + str(loss))
+            # print("The loss is " + str(loss))
                 # Compute standard deviation
                 # mse[layer.name + ' StdDev'][i] = np.std(layer_losses[layer.name][i], ddof=1)  # ddof=1 for sample stddev
 
@@ -314,4 +317,5 @@ def run_input_layer():
 # for dt in DT_LIST:
 #     run_experiment(dt)
 
-run_input_layer()
+# run_input_layer()
+utils.plot_single_row_dt("mnist_experiments_dt")

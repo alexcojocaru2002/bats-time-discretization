@@ -70,7 +70,7 @@ DT = 0.0003922
 # DT_LIST =[0.000390625, 3.92156862745098e-4, 0.000400625,  0.000405625, 0.000410625, 0.000420625]
 
 # DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0000, max_dt=0.01, step=0.00001)
-DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.005, max_dt=0.006, step=0.00001)
+DT_LIST = utils.generate_dt_list_from_bounds(min_dt=0.0, max_dt=0.01, step=0.00001)
 
 # DT_LIST = [0.003]
 
@@ -305,7 +305,7 @@ def run_input_layer():
             # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get() + 3.8e-3, DT)
             # loss = utils.mse_loss(network.layers[0].spike_trains[0].get() + 3.8e-3,  discrete_spikes_simple)
             # discrete_spikes_simple = utils.discrete(network.layers[0].spike_trains[0].get(), DT)
-            loss = utils.mse_loss(network.layers[1].spike_trains[0].get(), network.layers[1].spike_trains[2].get())
+            loss = utils.mse_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get())
             # loss = utils.vp_loss(network.layers[0].spike_trains[0].get(), network.layers[0].spike_trains[2].get(), q=5.0)
             mse["DT="+str(deltat)] = loss  # Accumulate the loss directly in the DataFrame
             # print("The loss is " + str(loss))
@@ -335,4 +335,5 @@ def run_input_layer():
 # for dt in DT_LIST:
 #     run_experiment(dt)
 
-run_input_layer()
+# run_input_layer()
+utils.plot_single_row_dt("mnist_experiments_dt", 'EMNIST')

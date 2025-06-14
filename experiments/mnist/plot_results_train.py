@@ -118,11 +118,25 @@ def load_csv_metrics(base_folder, phase="Test"):
 def plot_metric_mean_std(base_folder, metric="Loss", phase="Test", start_epoch=0):
     """
     Plots the average ± std for a selected metric over epochs, grouped by DT.
+    The highest DT is plotted in black.
     """
     dt_data = load_csv_metrics(base_folder, phase)
 
     plt.figure(figsize=(10, 6))
-    for dt_str in sorted(dt_data.keys(), key=lambda x: float(x)):
+
+    # Get sorted DTs numerically
+    dt_keys = sorted(dt_data.keys(), key=lambda x: float(x))
+    dt_floats = [float(dt) for dt in dt_keys]
+
+    # Identify max DT
+    max_dt = max(dt_floats)
+
+    # Create colormap for the other DTs
+    cmap = plt.get_cmap('tab10')
+    num_colors = len(dt_keys) - 1
+    color_idx = 0
+
+    for dt_str in dt_keys:
         dfs = dt_data[dt_str]
         dfs_trimmed = []
 
@@ -141,15 +155,33 @@ def plot_metric_mean_std(base_folder, metric="Loss", phase="Test", start_epoch=0
         mean = mean_series.to_numpy()
         std = std_series.to_numpy()
 
-        plt.plot(epochs, mean, label=f"DT = {dt_str}")
-        plt.fill_between(epochs, mean - std, mean + std, alpha=0.2)
+        # Assign color
+        if float(dt_str) == max_dt:
+            color = 'black'
+        else:
+            color = cmap(color_idx % 10)
+            color_idx += 1
 
-    plt.xlabel("Epochs")
-    plt.ylabel(metric)
-    plt.title(f"{metric} over Epochs ({phase}, mean ± std)")
+        plt.plot(epochs, mean, label=f"DT = {dt_str}", linewidth=2, color=color)
+        plt.fill_between(epochs, mean - std, mean + std, alpha=0.1, color=color)
+
+    handles, labels = plt.gca().get_legend_handles_labels()
+    print("Legend labels:", labels)
+
+    custom_labels = [f"Δt = {float(label.split('=')[1]):.6f}" for label in labels]
+
+    plt.xlabel("Epochs", fontsize=14)
+    plt.ylabel(metric, fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
     plt.grid(True)
-    plt.legend()
+    plt.legend(handles, custom_labels, fontsize=13)
     plt.tight_layout()
+
+    filename = f"{metric}_{phase}_mean_std.pdf".replace(" ", "_")
+    save_path = os.path.join(base_folder, filename)
+    plt.savefig(save_path)
+    print(f"Plot saved to: {save_path}")
     plt.show()
 
 # Step 4: Execute
@@ -164,8 +196,8 @@ def plot_metric_mean_std(base_folder, metric="Loss", phase="Test", start_epoch=0
 
 base_folder = "output_metrics"
 
-plot_metric_mean_std("output_metrics", metric="Accuracy (%)", phase="Test", start_epoch=5)
-plot_metric_mean_std("output_metrics", metric="Hidden layer 1 spike counts", phase="Test", start_epoch=5)
-plot_metric_mean_std("output_metrics", metric="Loss", phase="Train", start_epoch=5)
-plot_metric_mean_std("output_metrics", metric="Accuracy (%)", phase="Train", start_epoch=5)
+plot_metric_mean_std("output_metrics", metric="Accuracy (%)", phase="Test", start_epoch=0)
+plot_metric_mean_std("output_metrics", metric="Hidden layer 1 spike counts", phase="Test", start_epoch=0)
+plot_metric_mean_std("output_metrics", metric="Loss", phase="Train", start_epoch=0)
+plot_metric_mean_std("output_metrics", metric="Accuracy (%)", phase="Train", start_epoch=0)
 

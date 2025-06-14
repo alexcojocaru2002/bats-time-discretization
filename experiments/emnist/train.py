@@ -25,7 +25,7 @@ SIMULATION_TIME = 0.2
 # LATENCY_TIMES_LIST = [0.02, 0.03, 0.05, 0.08, 0.1, 0.13, 0.15, 0.18, 0.2]
 
 # Hidden layer
-N_NEURONS_1 = 800
+N_NEURONS_1 = 200
 TAU_S_1 = 0.130
 THRESHOLD_HAT_1 = 0.2
 DELTA_THRESHOLD_1 = 1 * THRESHOLD_HAT_1
@@ -310,25 +310,26 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR):
     train_monitors_manager.export()
     return test_monitors_manager, train_monitors_manager
 
-NR_EXPERIMENTS = 1
+NR_EXPERIMENTS = 3
 
 if __name__ == "__main__":
     monitors_dict = {}
     all_results = []
     all_results_test = []
-
-    DT_list = [0.0005]
+    np_seeds = [2105046595]
+    cp_seeds = [2087385653]
+    DT_list = [0.000768]
 
     for i in range(0, NR_EXPERIMENTS):
         print("STARTING RUN NUMBER " + str(i))
         print("\n")
         max_int = np.iinfo(np.int32).max
 
-        np_seed = np.random.randint(low=0, high=max_int)
-        cp_seed = np.random.randint(low=0, high=max_int)
+        # np_seed = np.random.randint(low=0, high=max_int)
+        # cp_seed = np.random.randint(low=0, high=max_int)
 
-        # np_seed = 357232581
-        # cp_seed = 2103377206
+        np_seed = np_seeds[i]
+        cp_seed = cp_seeds[i]
 
         print(f"Numpy seed: {np_seed}, Cupy seed: {cp_seed}")
         EXPORT_DIR = Path("./output_metrics/" + "experiment_" + str(i) + "_ " + str(str(np_seed) + "_" + str(cp_seed)))

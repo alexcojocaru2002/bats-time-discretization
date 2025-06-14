@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import cupy as cp
 import numpy as np
@@ -83,7 +84,6 @@ def plot_heatmap(weights, title="Weight Heatmap"):
 def mse_loss(spike_train, discrete_spike_train):
     mse = 0.0
     total_count = 0
-    print(spike_train.shape)
 
     for batch_idx in range(spike_train.shape[0]):
         for neuron_index in range(spike_train.shape[1]):
@@ -146,6 +146,7 @@ def plot_mse_stdev(mse_df, DT):
 
 
 
+# Plots the mse value for all the DTs in the dataframe
 def plot_single_row_dt(csv_path, dataset_name='MNIST'):
     df = pd.read_csv(csv_path)
 
@@ -160,16 +161,18 @@ def plot_single_row_dt(csv_path, dataset_name='MNIST'):
     theoretical = (x / np.sqrt(3))
 
     # Plot
-    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE')
-    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (dt/√3)')
+    plt.figure(figsize=(8, 6))
+    plt.plot(x, y, linestyle='-', label='Measured Input Layer MSE', linewidth=2.5)
+    plt.plot(x, theoretical, linestyle='--', label='Theoretical: (''Δt/√3)', linewidth=2.5)
 
-    plt.xlabel('Delta Time (DT)')
-    plt.ylabel('Input Layer MSE')
-    plt.title('MSE vs Delta Time (DT) for dataset ' + dataset_name)
-    plt.xticks(rotation=45, ha="right")
-    plt.legend()
+    plt.xlabel('Delta Time (Δt)', fontsize=15)
+    plt.ylabel('Input Layer MSE', fontsize=15)
+    plt.legend(fontsize=15)
     plt.grid(True)
     plt.tight_layout()
+    filename = "fmnist_mse.pdf"
+    save_path = os.path.join("output_metrics", filename)
+    plt.savefig(save_path)
     plt.show()
 
 def generate_dt_list(central_dt: float, n: int, step: float) -> list:

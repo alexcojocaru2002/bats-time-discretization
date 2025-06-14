@@ -319,12 +319,12 @@ def train_spike_count(DT, np_seed, cp_seed, EXPORT_DIR, PLOT_DIR, dataset):
     train_monitors_manager.export()
     return test_monitors_manager, train_monitors_manager
 
-NR_EXPERIMENTS = 3
+NR_EXPERIMENTS = 1
 
 if __name__ == "__main__":
     monitors_dict = {}
 
-    DT_list = [0.0001, 0.0003921568, 0.000393701, 0.0004, 0.0005, 0.001, 0.002, 0.003, 0.004, 0.005]
+    DT_list = [0.0004, 0.0005, 0.001, 0.002, 0.003, 0.004, 0.005]
     np.set_printoptions(threshold=sys.maxsize)
     # Dataset
     print("Loading datasets...")
@@ -333,8 +333,8 @@ if __name__ == "__main__":
     for i in range(0, NR_EXPERIMENTS):
         print("STARTING RUN NUMBER " + str(i))
         max_int = np.iinfo(np.int32).max
-        np_seed = np.random.randint(low=0, high=max_int)
-        cp_seed = np.random.randint(low=0, high=max_int)
+        np_seed = 1073695077
+        cp_seed = 262700171
         EXPORT_DIR = Path("./output_metrics/" + "experiment_" + str(i) + "_ " + str(str(np_seed) + "_" + str(cp_seed)))
 
         for val in DT_list:
